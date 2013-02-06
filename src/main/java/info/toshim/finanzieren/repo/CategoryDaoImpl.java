@@ -1,8 +1,9 @@
 package info.toshim.finanzieren.repo;
 
-import java.util.List;
-
+import info.toshim.finanzieren.domain.Category;
 import info.toshim.finanzieren.domain.Wallet;
+
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -15,28 +16,28 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class WalletDaoImpl implements WalletDao
+public class CategoryDaoImpl implements CategoryDao
 {
 	@Autowired
 	private EntityManager em;
 
-	public void save(Wallet wallet)
+	public void save(Category category)
 	{
-		em.persist(wallet);
+		em.persist(category);
 		return;
 	}
 
-	public Wallet findById(int id)
+	public Category findById(int id)
 	{
-		return em.find(Wallet.class, id);
+		return em.find(Category.class, id);
 	}
 
-	public List<Wallet> findAll()
+	public List<Category> findAll()
 	{
 		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Wallet> criteria = cb.createQuery(Wallet.class);
-		Root<Wallet> wallet = criteria.from(Wallet.class);
-		criteria.select(wallet);
+		CriteriaQuery<Category> criteria = cb.createQuery(Category.class);
+		Root<Category> category = criteria.from(Category.class);
+		criteria.select(category);
 		return em.createQuery(criteria).getResultList();
 	}
 }

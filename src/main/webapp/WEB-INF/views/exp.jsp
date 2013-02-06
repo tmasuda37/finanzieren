@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-  pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <html>
@@ -16,32 +15,62 @@
     <p>
       <strong>支出登録 － あなたの財布から支出した記録を残しましょう</strong>
     </p>
-    <form:form commandName="regWalletRecord">
+    <form:form commandName="regWalletRecord" id="reg">
       <table width="346" border="1">
         <tr>
-          <td width="165"><label for="wlamount">金額<br>
-          </label> <input type="text" name="wlamount" id="wlamount"></td>
-          <td width="165"><label for="wlcurrency">通貨<br>
-          </label> <select name="wlcurrency" id="wlcurrency">
-          </select></td>
+          <td width="165">
+            <label for="wlAmount">
+              金額
+              <br>
+            </label>
+            <form:input path="wlAmount" />
+          </td>
+          <td width="165">
+            <label for="wlCurrency">
+              通貨
+              <br>
+            </label>
+<%--             <form:select path="wlCurrency">
+              <form:options items="listWlcurrency" />
+            </form:select>
+ --%>          </td>
         </tr>
         <tr>
-          <td><label for="wlcategory">分類<br>
-          </label> <select name="wlcategory" id="wlcategory">
-          </select></td>
-          <td><label for="wldate">日付<br></label> <select
-            name="wldate" id="wldate">
-          </select></td>
+          <td>
+            <label for="wlCategory">
+              分類
+              <br>
+            </label>
+            <form:select path="wlCategory">
+              <form:options items="${listWlcategory}" itemValue="id" itemLabel="category"/>
+            </form:select>
+          </td>
+          <td>
+            <label for="wlDate">
+              日付
+              <br>
+            </label>
+<%--             <form:select path="wlDate">
+               <form:options items="listWldate" />
+             </form:select>
+ --%>          </td>
         </tr>
         <tr>
-          <td colspan="2"><label for="wlnote">備考<br>
-          </label> <textarea name="wlnote" id="wlnote" cols="45" rows="5"></textarea></td>
+          <td colspan="2">
+            <label for="wlNote">
+              備考
+              <br>
+            </label>
+            <form:textarea path="wlNote" id="wlNote" cols="45" rows="5" />
+          </td>
         </tr>
         <tr>
-          <td><input type="submit" name="submit" id="submit"
-            value="支出登録"></td>
-          <td><input type="reset" name="reset" id="reset"
-            value="クリア"></td>
+          <td>
+            <input type="submit" name="submit" id="submit" value="支出登録" />
+          </td>
+          <td>
+            <input type="reset" name="reset" id="reset" value="クリア" />
+          </td>
         </tr>
       </table>
     </form:form>

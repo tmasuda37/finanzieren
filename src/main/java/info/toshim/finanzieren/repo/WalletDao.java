@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface WalletDao
 {
-	public Wallet findById(Long id);
+	public void save(Wallet wallet);
 
-	public List<Wallet> findAllOrderedByName();
+	public Wallet findById(int id);
 
-	public void register(Wallet wallet);
+	public List<Wallet> findAll();
 }
