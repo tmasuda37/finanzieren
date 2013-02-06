@@ -2,7 +2,6 @@ package info.toshim.finanzieren.repo;
 
 import java.util.List;
 
-import info.toshim.finanzieren.domain.Member;
 import info.toshim.finanzieren.domain.Wallet;
 
 import javax.persistence.EntityManager;
