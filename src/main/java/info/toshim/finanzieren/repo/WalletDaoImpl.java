@@ -23,6 +23,7 @@ public class WalletDaoImpl implements WalletDao
 	public void save(Wallet wallet)
 	{
 		em.persist(wallet);
+		em.flush();
 		return;
 	}
 

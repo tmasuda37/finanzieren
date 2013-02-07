@@ -4,7 +4,11 @@
   version="1.0">
   <persistence-unit name="testPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <class>info.toshim.finanzieren.domain.Member</class>
     <class>info.toshim.finanzieren.domain.Wallet</class>
+    <class>info.toshim.finanzieren.domain.Category</class>
+    <class>info.toshim.finanzieren.domain.Kind</class>
+    <class>info.toshim.finanzieren.domain.Currency</class>
     <properties>
       <property name="hibernate.hbm2ddl.auto" value="create-drop" />
       <property name="hibernate.show_sql" value="true" />

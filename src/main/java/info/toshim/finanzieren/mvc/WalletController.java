@@ -37,14 +37,11 @@ public class WalletController
 	@RequestMapping(method = RequestMethod.GET)
 	public String displayExp(Model model)
 	{
-		List<String> listWlcurrency = new ArrayList<String>();
+		List<Currency> listWlcurrency = null;
 		List<Category> listWlcategory = categoryDao.findAll();
-		log.info("[Date size] " + listWlcategory.size());
-		List<String> listWldate = new ArrayList<String>();
 		model.addAttribute("regWalletRecord", new Wallet());
 		model.addAttribute("listWlcurrency", listWlcurrency);
 		model.addAttribute("listWlcategory", listWlcategory);
-		model.addAttribute("listWldate", listWldate);
 		return "exp";
 	}
 
@@ -61,6 +58,6 @@ public class WalletController
 		String wlNote = "Starbucks";
 		wallet = new Wallet(userid, wlDate, wlKind, wlCategory, wlAmount, wlCurrency, wlNote);
 		walletDao.save(wallet);
-		return "success";
+		return "exp";
 	}
 }
