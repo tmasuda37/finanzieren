@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -34,6 +35,8 @@ public class Wallet implements Serializable
 	@JoinColumn
 	private Category category;
 
+	@NotNull
+	@Digits(fraction = 2, integer = 7)
 	private Double amount;
 
 	@ManyToOne
@@ -138,5 +141,11 @@ public class Wallet implements Serializable
 	public void setNote(String note)
 	{
 		this.note = note;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Wallet [id=" + id + ", userid=" + userid + ", date=" + date + ", kind=" + kind + ", category=" + category + ", amount=" + amount + ", currency=" + currency + ", note=" + note + "]";
 	}
 }

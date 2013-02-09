@@ -1,7 +1,6 @@
 package info.toshim.finanzieren.repo;
 
 import info.toshim.finanzieren.domain.Category;
-import info.toshim.finanzieren.domain.Wallet;
 
 import java.util.List;
 

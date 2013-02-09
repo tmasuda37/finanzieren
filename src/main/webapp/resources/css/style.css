@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-#header  {
+#header {
 	background-color: #000;
 	margin: 0px;
 	top: 0px;
@@ -16,7 +16,7 @@
 body {
 	background-color: #CCC;
 }
-#bottom  {
+#bottom {
 	background-color: #000;
 	position: absolute;
 	left: 0px;
@@ -36,7 +36,7 @@ input {
 }
 select {
 	height: auto;
-    width: 150px;
+	width: 150px;
 }
 #center {
 	position: fixed;
@@ -64,5 +64,9 @@ textarea {
 	border-bottom-style: none;
 	border-left-style: none;
 	vertical-align: top;
-	height: 120px;
+}
+
+.invalid {
+	font-weight: bold;
+	color: #ff0000;
 }

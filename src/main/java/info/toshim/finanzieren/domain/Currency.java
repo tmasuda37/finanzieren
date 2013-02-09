@@ -44,4 +44,10 @@ public class Currency implements Serializable
 	{
 		this.currency = currency;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "Currency [id=" + id + ", currency=" + currency + "]";
+	}
 }

@@ -23,6 +23,7 @@
               <br>
             </label>
             <form:input path="amount" />
+            <form:errors class="invalid" path="amount" />
           </td>
           <td width="165">
             <label for="currency">
@@ -52,6 +53,7 @@
             <form:select path="date" size="${listWlDate.size()}">
               <form:options items="${listWlDate}" />
             </form:select>
+            <form:errors class="invalid" path="date" />
           </td>
         </tr>
         <tr>

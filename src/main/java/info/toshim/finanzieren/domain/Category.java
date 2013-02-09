@@ -44,4 +44,10 @@ public class Category implements Serializable
 	{
 		this.category = category;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "Category [id=" + id + ", category=" + category + "]";
+	}
 }

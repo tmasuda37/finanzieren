@@ -50,4 +50,10 @@ public class Kind implements Serializable
 	{
 		this.kind = kind;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "Kind [id=" + id + ", kind=" + kind + "]";
+	}
 }

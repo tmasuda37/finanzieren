@@ -71,9 +71,26 @@ public class WalletController
 	@RequestMapping(method = RequestMethod.POST)
 	public String registerExp(@Valid @ModelAttribute("regWalletRecord") Wallet wallet, BindingResult result, Model model)
 	{
-		Kind kind = new Kind(1);
-		wallet.setKind(kind);
-		walletDao.save(wallet);
-		return "redirect:/";
+		if (!result.hasErrors())
+		{
+			log.info("[OKAY] The validation error is not happened!");
+			Kind kind = new Kind(1);
+			wallet.setKind(kind);
+			walletDao.save(wallet);
+			return "redirect:/";
+		} else
+		{
+			log.info("[OKAY] The validation error is not happened!");
+			log.info(result.getAllErrors());
+			List<Currency> listWlcurrency = currencyDao.findAll();
+			List<Category> listWlcategory = categoryDao.findAll();
+			ListOfDates listOfDates = new ListOfDates();
+			List<String> listWlDate = listOfDates.getListOfDates(10, ListOfDates.DAY_MODE);
+			model.addAttribute("regWalletRecord", wallet);
+			model.addAttribute("listWlcurrency", listWlcurrency);
+			model.addAttribute("listWlcategory", listWlcategory);
+			model.addAttribute("listWlDate", listWlDate);
+			return "exp";
+		}
 	}
 }
