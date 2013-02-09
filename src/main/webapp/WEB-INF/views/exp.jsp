@@ -5,8 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>支出登録</title>
-<link href="<c:url value="/static/resources/css/style.css"/>"
-  rel="stylesheet" type="text/css">
+<link href="<c:url value="/static/resources/css/style.css"/>" rel="stylesheet" type="text/css">
 <script src="http://use.edgefonts.net/alegreya-sc.js"></script>
 </head>
 <body>
@@ -19,49 +18,49 @@
       <table width="346" border="1">
         <tr>
           <td width="165">
-            <label for="wlAmount">
+            <label for="amount">
               金額
               <br>
             </label>
-            <form:input path="wlAmount" />
+            <form:input path="amount" />
           </td>
           <td width="165">
-            <label for="wlCurrency">
+            <label for="currency">
               通貨
               <br>
             </label>
-<%--             <form:select path="wlCurrency">
-              <form:options items="listWlcurrency" />
+            <form:select path="currency.id" size="${listWlcurrency.size()}">
+              <form:options items="${listWlcurrency}" itemValue="id" itemLabel="currency" />
             </form:select>
- --%>          </td>
+          </td>
         </tr>
         <tr>
           <td>
-            <label for="wlCategory">
+            <label for="category">
               分類
               <br>
             </label>
-            <form:select path="wlCategory">
-              <form:options items="${listWlcategory}" itemValue="id" itemLabel="category"/>
+            <form:select path="category.id" size="${listWlcategory.size()}">
+              <form:options items="${listWlcategory}" itemValue="id" itemLabel="category" />
             </form:select>
           </td>
           <td>
-            <label for="wlDate">
+            <label for="date">
               日付
               <br>
             </label>
-<%--             <form:select path="wlDate">
-               <form:options items="listWldate" />
-             </form:select>
- --%>          </td>
+            <form:select path="date" size="${listWlDate.size()}">
+              <form:options items="${listWlDate}" />
+            </form:select>
+          </td>
         </tr>
         <tr>
           <td colspan="2">
-            <label for="wlNote">
+            <label for="note">
               備考
               <br>
             </label>
-            <form:textarea path="wlNote" id="wlNote" cols="45" rows="5" />
+            <form:textarea path="note" id="note" cols="45" rows="5" />
           </td>
         </tr>
         <tr>

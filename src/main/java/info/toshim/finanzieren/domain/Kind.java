@@ -25,17 +25,10 @@ public class Kind implements Serializable
 		super();
 	}
 
-	public Kind(String kind)
-	{
-		super();
-		this.kind = kind;
-	}
-
-	public Kind(int id, String kind)
+	public Kind(int id)
 	{
 		super();
 		this.id = id;
-		this.kind = kind;
 	}
 
 	public int getId()

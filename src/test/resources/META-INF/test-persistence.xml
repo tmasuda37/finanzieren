@@ -4,7 +4,6 @@
   version="1.0">
   <persistence-unit name="testPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <class>info.toshim.finanzieren.domain.Member</class>
     <class>info.toshim.finanzieren.domain.Wallet</class>
     <class>info.toshim.finanzieren.domain.Category</class>
     <class>info.toshim.finanzieren.domain.Kind</class>

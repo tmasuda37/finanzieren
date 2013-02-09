@@ -4,10 +4,13 @@ import info.toshim.finanzieren.domain.Category;
 import info.toshim.finanzieren.domain.Currency;
 import info.toshim.finanzieren.domain.Kind;
 import info.toshim.finanzieren.domain.Wallet;
+import info.toshim.finanzieren.mvc.core.ListOfDates;
 import info.toshim.finanzieren.repo.CategoryDao;
+import info.toshim.finanzieren.repo.CurrencyDao;
+import info.toshim.finanzieren.repo.KindDao;
 import info.toshim.finanzieren.repo.WalletDao;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -15,9 +18,12 @@ import javax.validation.Valid;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,30 +40,40 @@ public class WalletController
 	@Autowired
 	private CategoryDao categoryDao;
 
+	@Autowired
+	private CurrencyDao currencyDao;
+
+	@Autowired
+	private KindDao kindDao;
+
+	@InitBinder
+	public void initBinder(WebDataBinder binder)
+	{
+		CustomDateEditor editor = new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true);
+		binder.registerCustomEditor(Date.class, editor);
+	}
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String displayExp(Model model)
 	{
-		List<Currency> listWlcurrency = null;
+		List<Currency> listWlcurrency = currencyDao.findAll();
 		List<Category> listWlcategory = categoryDao.findAll();
-		model.addAttribute("regWalletRecord", new Wallet());
+		ListOfDates listOfDates = new ListOfDates();
+		List<String> listWlDate = listOfDates.getListOfDates(10, ListOfDates.DAY_MODE);
+		Wallet wallet = new Wallet();
+		model.addAttribute("regWalletRecord", wallet);
 		model.addAttribute("listWlcurrency", listWlcurrency);
 		model.addAttribute("listWlcategory", listWlcategory);
+		model.addAttribute("listWlDate", listWlDate);
 		return "exp";
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	public String registerExp(@Valid @ModelAttribute("regWalletRecord") Wallet wallet, BindingResult result, Model model)
 	{
-		log.info("It comes until here!");
-		String userid = "12345678901234567890123456789012";
-		Date wlDate = new Date();
-		Kind wlKind = new Kind("TEST");
-		Category wlCategory = new Category("FOOD");
-		Double wlAmount = wallet.getWlAmount();
-		Currency wlCurrency = new Currency("JPY");
-		String wlNote = "Starbucks";
-		wallet = new Wallet(userid, wlDate, wlKind, wlCategory, wlAmount, wlCurrency, wlNote);
+		Kind kind = new Kind(1);
+		wallet.setKind(kind);
 		walletDao.save(wallet);
-		return "exp";
+		return "redirect:/";
 	}
 }

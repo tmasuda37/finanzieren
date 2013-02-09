@@ -25,12 +25,6 @@ public class Category implements Serializable
 		super();
 	}
 
-	public Category(String category)
-	{
-		super();
-		this.category = category;
-	}
-
 	public int getId()
 	{
 		return id;
