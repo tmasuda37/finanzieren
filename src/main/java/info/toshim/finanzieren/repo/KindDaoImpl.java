@@ -23,6 +23,7 @@ public class KindDaoImpl implements KindDao
 	public void save(Kind kind)
 	{
 		em.persist(kind);
+		em.flush();
 		return;
 	}
 

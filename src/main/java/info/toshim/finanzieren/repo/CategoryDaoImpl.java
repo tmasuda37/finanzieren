@@ -23,6 +23,7 @@ public class CategoryDaoImpl implements CategoryDao
 	public void save(Category category)
 	{
 		em.persist(category);
+		em.flush();
 		return;
 	}
 
@@ -37,6 +38,26 @@ public class CategoryDaoImpl implements CategoryDao
 		CriteriaQuery<Category> criteria = cb.createQuery(Category.class);
 		Root<Category> category = criteria.from(Category.class);
 		criteria.select(category);
+		return em.createQuery(criteria).getResultList();
+	}
+
+	public List<Category> findExpAll()
+	{
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Category> criteria = cb.createQuery(Category.class);
+		Root<Category> category = criteria.from(Category.class);
+		criteria.select(category);
+		criteria.where(cb.equal(category.get("kind").get("id"), 0));
+		return em.createQuery(criteria).getResultList();
+	}
+
+	public List<Category> findIncAll()
+	{
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Category> criteria = cb.createQuery(Category.class);
+		Root<Category> category = criteria.from(Category.class);
+		criteria.select(category);
+		criteria.where(cb.equal(category.get("kind").get("id"), 1));
 		return em.createQuery(criteria).getResultList();
 	}
 }

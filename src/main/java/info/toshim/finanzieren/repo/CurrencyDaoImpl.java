@@ -23,6 +23,7 @@ public class CurrencyDaoImpl implements CurrencyDao
 	public void save(Currency currency)
 	{
 		em.persist(currency);
+		em.flush();
 		return;
 	}
 

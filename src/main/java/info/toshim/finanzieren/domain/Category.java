@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -20,9 +22,14 @@ public class Category implements Serializable
 	@NotNull
 	private String category;
 
+	@OneToOne
+	@JoinColumn
+	private Kind kind;
+
 	public Category()
 	{
 		super();
+		this.id = -1;
 	}
 
 	public int getId()
@@ -43,6 +50,16 @@ public class Category implements Serializable
 	public void setCategory(String category)
 	{
 		this.category = category;
+	}
+
+	public Kind getKind()
+	{
+		return kind;
+	}
+
+	public void setKind(Kind kind)
+	{
+		this.kind = kind;
 	}
 
 	@Override

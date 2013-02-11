@@ -7,15 +7,26 @@
 	left: 0px;
 	right: 0px;
 	position: absolute;
-	height: 44px;
+	height: 72px;
 	color: #5959FF;
 	padding-left: 10px;
-	font-size: xx-large;
+	font-size: 44px;
 	font-family: alegreya-sc, serif;
 }
+
 body {
 	background-color: #CCC;
 }
+
+#header #menu ul li {
+	list-style-type: none;
+	float: left;
+	margin-left: 20px;
+	font-size: 24px;
+	font-family: "MS UI Gothic";
+	margin-right: 20px;
+}
+
 #bottom {
 	background-color: #000;
 	position: absolute;
@@ -24,7 +35,7 @@ body {
 	bottom: 0px;
 	width: 100%;
 	margin: 0px;
-	color: #5959FF;
+	color: #CF3;
 	font-size: small;
 	padding-left: 10px;
 	height: 18px;
@@ -34,10 +45,12 @@ input {
 	height: 30px;
 	width: 150px;
 }
+
 select {
 	height: auto;
 	width: 150px;
 }
+
 #center {
 	position: fixed;
 	left: 50px;
@@ -47,6 +60,7 @@ select {
 textarea {
 	width: 320px;
 }
+
 #center form table {
 	font-size: small;
 	border-top-style: none;
@@ -58,6 +72,7 @@ textarea {
 	border-bottom-width: thin;
 	border-left-width: thin;
 }
+
 #center form table tr td {
 	border-top-style: none;
 	border-right-style: none;
@@ -69,4 +84,128 @@ textarea {
 .invalid {
 	font-weight: bold;
 	color: #ff0000;
+}
+
+#header #menu {
+	float: right;
+}
+
+.displaytag table {
+	border: 1px solid #666;
+	width: 100%;
+	margin: 20px 0 20px 0 !important;
+}
+
+.displaytag th, .displaytag td {
+	padding: 2px 4px 2px 4px !important;
+	text-align: left;
+	vertical-align: top;
+}
+
+.displaytag thead tr {
+	background-color: #fc0;
+}
+
+.displaytag th.sorted {
+	background-color: orange;
+}
+
+.displaytag th a, .displaytag th a:visited {
+	color: black;
+}
+
+.displaytag th a:hover {
+	text-decoration: underline;
+	color: black;
+}
+
+.displaytag th.sorted a, .displaytag th.sortable a {
+	background-position: right;
+	background-repeat: no-repeat;
+	display: block;
+	width: 100%;
+}
+
+.displaytag th.sortable a {
+	background-image: url(arrow_off.png);
+}
+
+.displaytag th.order1 a {
+	background-image: url(arrow_down.png);
+}
+
+.displaytag th.order2 a {
+	background-image: url(arrow_up.png);
+}
+
+.displaytag tr.odd {
+	background-color: #fff
+}
+
+.displaytag tr.tableRowEven, .displaytag tr.even {
+	background-color: #fea
+}
+
+.displaytag div.exportlinks {
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	margin: 2px 0 10px 0;
+	width: 95%;
+}
+
+.displaytag span.export {
+	padding: 0 4px 1px 20px;
+	display: inline;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.displaytag span.excel {
+	background-image: url(ico_file_excel.png);
+	background-repeat: no-repeat;
+}
+
+.displaytag span.csv {
+	background-image: url(ico_file_csv.png);
+	background-repeat: no-repeat;
+}
+
+.displaytag span.xml {
+	background-image: url(ico_file_xml.png);
+	background-repeat: no-repeat;
+}
+
+.displaytag span.pdf {
+	background-image: url(ico_file_pdf.png);
+	background-repeat: no-repeat;
+}
+
+.displaytag span.rtf {
+	background-image: url(ico_file_rtf.png);
+	background-repeat: no-repeat;
+}
+
+.displaytag span.pagebanner {
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	width: 95%;
+	margin-top: 10px;
+	display: block;
+	border-bottom: none;
+}
+
+.displaytag span.pagelinks {
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	width: 95%;
+	display: block;
+	border-top: none;
+	margin-bottom: -5px;
+}
+
+a {
+	color: #CF3;
 }

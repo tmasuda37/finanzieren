@@ -12,7 +12,7 @@
   <jsp:include page="/WEB-INF/views/menu.jsp" />
   <div id="center">
     <p>
-      <strong>支出登録 － あなたの財布から支出した記録を残しましょう</strong>
+      <strong>収入登録 － あなたの財布から収入した記録を残しましょう</strong>
     </p>
     <form:form commandName="regWalletRecord">
       <table width="346" border="1">
@@ -67,7 +67,7 @@
         </tr>
         <tr>
           <td>
-            <input type="submit" name="submit" id="submit" value="支出登録" />
+            <input type="submit" name="submit" id="submit" value="収入登録" />
           </td>
           <td>
             <input type="reset" name="reset" id="reset" value="クリア" />

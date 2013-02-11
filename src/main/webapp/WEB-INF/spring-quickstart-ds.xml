@@ -10,7 +10,7 @@
    <datasource jndi-name="java:jboss/datasources/SpringQuickstartDS"
       pool-name="kitchensink-quickstart" enabled="true"
       use-java-context="true">
-      <connection-url>jdbc:h2:~/test</connection-url>
+      <connection-url>jdbc:h2:~/finanzieren</connection-url>
       <driver>h2</driver>
       <security>
          <user-name>sa</user-name>

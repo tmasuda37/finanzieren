@@ -8,6 +8,8 @@ public interface WalletDao
 {
 	public void save(Wallet wallet);
 
+	public void delete(int id);
+
 	public Wallet findById(int id);
 
 	public List<Wallet> findAll();
