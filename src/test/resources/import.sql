@@ -1,4 +1,4 @@
-insert into Kind (id, kind) values (1, '支出');
+insert into Kind (id, kind) values (1, 'TEST');
 insert into Kind (id, kind) values (2, '収入');
 insert into Kind (id, kind) values (3, '転出');
 insert into Kind (id, kind) values (4, '転入');
