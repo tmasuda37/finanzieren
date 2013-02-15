@@ -14,7 +14,7 @@
     <p>
       <strong>現在状況 － あなたの財布、支出、収入の状況です</strong>
     </p>
-    <display:table id="data" name="listWallet" class="displaytag" requestURI="/list" sort="list">
+    <display:table id="data" name="listWallet" class="displaytag" requestURI="/list" sort="list" pagesize="17">
       <display:column title="ID" sortable="true">
         <a href="<c:url value="/list/${data.id}/delete/"/>"> <img
           src="<c:url value="/static/resources/gfx/delete.png"/>" />

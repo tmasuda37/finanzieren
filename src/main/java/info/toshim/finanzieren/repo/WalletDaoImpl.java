@@ -44,7 +44,7 @@ public class WalletDaoImpl implements WalletDao
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Wallet> criteria = cb.createQuery(Wallet.class);
 		Root<Wallet> wallet = criteria.from(Wallet.class);
-		criteria.select(wallet);
+		criteria.select(wallet).orderBy(cb.desc(wallet.get("date")));
 		return em.createQuery(criteria).getResultList();
 	}
 }
