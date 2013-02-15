@@ -99,7 +99,7 @@ public class WalletController
 	{
 		if (!result.hasErrors())
 		{
-			Kind kind = new Kind(1);
+			Kind kind = new Kind(2);
 			wallet.setKind(kind);
 			walletDao.save(wallet);
 			return "redirect:/exp";
@@ -137,7 +137,7 @@ public class WalletController
 	{
 		if (!result.hasErrors())
 		{
-			Kind kind = new Kind(0);
+			Kind kind = new Kind(1);
 			wallet.setKind(kind);
 			walletDao.save(wallet);
 			return "redirect:/inc";

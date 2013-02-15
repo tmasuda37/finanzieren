@@ -47,7 +47,7 @@ public class CategoryDaoImpl implements CategoryDao
 		CriteriaQuery<Category> criteria = cb.createQuery(Category.class);
 		Root<Category> category = criteria.from(Category.class);
 		criteria.select(category);
-		criteria.where(cb.equal(category.get("kind").get("id"), 0));
+		criteria.where(cb.equal(category.get("kind").get("id"), 1));
 		return em.createQuery(criteria).getResultList();
 	}
 
@@ -57,7 +57,7 @@ public class CategoryDaoImpl implements CategoryDao
 		CriteriaQuery<Category> criteria = cb.createQuery(Category.class);
 		Root<Category> category = criteria.from(Category.class);
 		criteria.select(category);
-		criteria.where(cb.equal(category.get("kind").get("id"), 1));
+		criteria.where(cb.equal(category.get("kind").get("id"), 2));
 		return em.createQuery(criteria).getResultList();
 	}
 }
