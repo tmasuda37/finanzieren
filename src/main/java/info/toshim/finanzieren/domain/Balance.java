@@ -21,6 +21,19 @@ public class Balance implements Serializable
 
 	private Double sum = 0.0;
 
+	public Balance()
+	{
+		super();
+	}
+
+	public Balance(String userid, Currency currency, Double sum)
+	{
+		super();
+		this.userid = userid;
+		this.currency = currency;
+		this.sum = sum;
+	}
+
 	public String getUserid()
 	{
 		return userid;

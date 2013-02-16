@@ -22,7 +22,7 @@ public class Wallet implements Serializable
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	private String userid;
+	private String userid = "a34256c6bc043f5e081c39cd58fb03f1";
 
 	@NotNull
 	private Date date;

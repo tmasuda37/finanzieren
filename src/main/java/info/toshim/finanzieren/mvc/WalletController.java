@@ -102,6 +102,19 @@ public class WalletController
 			Kind kind = new Kind(2);
 			wallet.setKind(kind);
 			walletDao.save(wallet);
+			// Balance balance = balanceDao.findByUserId(wallet.getUserid());
+			// if (balance != null)
+			// {
+			// log.info("I found it");
+			// balance.setSum(balance.getSum() + wallet.getAmount());
+			// } else
+			// {
+			// log.info("I don't find it");
+			// balance = new Balance();
+			// balance.setUserid(wallet.getUserid());
+			// balance.setCurrency(wallet.getCurrency());
+			// }
+			// balanceDao.saveOrUpdate(balance);
 			return "redirect:/exp";
 		} else
 		{

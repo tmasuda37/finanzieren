@@ -4,7 +4,7 @@ import info.toshim.finanzieren.domain.Balance;
 
 public interface BalanceDao
 {
-	public Balance findByUserId(String userid);
+	public void saveOrUpdate(Balance balance);
 
-	public void updateByUserId(Balance balance);
+	public Balance findByUserId(String userid);
 }

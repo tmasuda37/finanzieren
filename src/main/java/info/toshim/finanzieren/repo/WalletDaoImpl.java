@@ -1,14 +1,15 @@
 package info.toshim.finanzieren.repo;
 
-import java.util.List;
-
 import info.toshim.finanzieren.domain.Wallet;
+
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class WalletDaoImpl implements WalletDao
 {
+	private static final Logger log = Logger.getLogger(WalletDaoImpl.class);
+
 	@Autowired
 	private EntityManager em;
 
