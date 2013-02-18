@@ -7,6 +7,8 @@ import java.util.List;
 public interface WalletDao
 {
 	public void save(Wallet wallet);
+	
+	public void update(Wallet wallet);
 
 	public void delete(int id);
 

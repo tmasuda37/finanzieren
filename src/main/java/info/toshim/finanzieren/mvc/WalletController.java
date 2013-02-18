@@ -13,6 +13,7 @@ import info.toshim.finanzieren.repo.KindDao;
 import info.toshim.finanzieren.repo.WalletDao;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -113,6 +114,46 @@ public class WalletController
 	public String deleteList(@PathVariable("id") int id)
 	{
 		walletDao.delete(id);
+		return "redirect:/refresh";
+	}
+
+	@RequestMapping(value = "/list/{id}/edit", method = RequestMethod.GET)
+	public String editList(@PathVariable("id") int id, Model model)
+	{
+		Wallet wallet = walletDao.findById(id);
+		String retPath = "";
+		switch (wallet.getKind().getId())
+		{
+		case 1:
+			retPath = "exp";
+			break;
+		case 2:
+			retPath = "inc";
+			break;
+		case 3:
+			retPath = "tro";
+			break;
+		case 4:
+			retPath = "tri";
+			break;
+		}
+		List<Currency> listWlcurrency = currencyDao.findAll();
+		List<Category> listWlcategory = categoryDao.findByKindId(wallet.getKind().getId());
+		String strDate = new SimpleDateFormat("yyyy-MM-dd").format(wallet.getDate());
+		List<String> listWlDate = new ArrayList<String>();
+		listWlDate.add(strDate);
+		model.addAttribute("regWalletRecord", wallet);
+		model.addAttribute("listWlcurrency", listWlcurrency);
+		model.addAttribute("listWlcategory", listWlcategory);
+		model.addAttribute("listWlDate", listWlDate);
+		return retPath;
+	}
+
+	@RequestMapping(value = "/list/{id}/edit", method = RequestMethod.POST)
+	public String editList(@Valid @ModelAttribute("regWalletRecord") Wallet wallet, BindingResult result, Model model)
+	{
+		walletDao.update(wallet);
+		this.calcBalanceByNewRecord(wallet);
 		return "redirect:/list";
 	}
 
@@ -202,7 +243,7 @@ public class WalletController
 		model.addAttribute("listWlcurrency", listWlcurrency);
 		model.addAttribute("listWlcategory", listWlcategory);
 		model.addAttribute("listWlDate", listWlDate);
-		return "tri";
+		return "tro";
 	}
 
 	@RequestMapping(value = "/tro", method = RequestMethod.POST)

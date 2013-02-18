@@ -19,8 +19,8 @@
         <td valign="top">
           <display:table id="data" name="listWallet" class="displaytag" requestURI="/list" sort="list" pagesize="17">
             <display:column title="編集・削除" sortable="true">
-              <a href="<c:url value="/list/${data.id}/delete/"/>"> <img src="<c:url value="/static/resources/gfx/delete.png"/>" />
-              </a>
+              <a href="<c:url value="/list/${data.id}/edit/"/>"><img src="<c:url value="/static/resources/gfx/edit.png"/>" /></a>・
+              <a href="<c:url value="/list/${data.id}/delete/"/>"><img src="<c:url value="/static/resources/gfx/delete.png"/>" /></a>
             </display:column>
             <display:column title="日付" property="date" sortable="true" format="{0,date,yyyy-MM-dd}" />
             <display:column title="項目" property="kind.kind" sortable="true" />

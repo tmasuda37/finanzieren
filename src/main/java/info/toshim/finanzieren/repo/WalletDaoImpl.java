@@ -30,6 +30,13 @@ public class WalletDaoImpl implements WalletDao
 		return;
 	}
 
+	public void update(Wallet wallet)
+	{
+		em.merge(wallet);
+		em.flush();
+		return;
+	}
+
 	public void delete(int id)
 	{
 		findById(id);
