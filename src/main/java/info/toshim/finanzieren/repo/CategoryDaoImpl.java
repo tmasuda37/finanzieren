@@ -41,23 +41,13 @@ public class CategoryDaoImpl implements CategoryDao
 		return em.createQuery(criteria).getResultList();
 	}
 
-	public List<Category> findExpAll()
+	public List<Category> findByKindId(int kindId)
 	{
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Category> criteria = cb.createQuery(Category.class);
 		Root<Category> category = criteria.from(Category.class);
 		criteria.select(category);
-		criteria.where(cb.equal(category.get("kind").get("id"), 1));
-		return em.createQuery(criteria).getResultList();
-	}
-
-	public List<Category> findIncAll()
-	{
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Category> criteria = cb.createQuery(Category.class);
-		Root<Category> category = criteria.from(Category.class);
-		criteria.select(category);
-		criteria.where(cb.equal(category.get("kind").get("id"), 2));
+		criteria.where(cb.equal(category.get("kind").get("id"), kindId));
 		return em.createQuery(criteria).getResultList();
 	}
 }

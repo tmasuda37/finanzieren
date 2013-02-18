@@ -12,7 +12,5 @@ public interface CategoryDao
 
 	public List<Category> findAll();
 
-	public List<Category> findExpAll();
-
-	public List<Category> findIncAll();
+	List<Category> findByKindId(int kindId);
 }
