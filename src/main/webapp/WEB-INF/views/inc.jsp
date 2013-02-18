@@ -15,6 +15,7 @@
       <strong>収入登録 － あなたの財布から収入した記録を残しましょう</strong>
     </p>
     <form:form commandName="regWalletRecord">
+      <form:hidden path="kind.id" value="2" />
       <table width="346" border="1">
         <tr>
           <td width="165">

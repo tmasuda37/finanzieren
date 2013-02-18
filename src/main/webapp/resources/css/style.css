@@ -206,6 +206,122 @@ textarea {
 	margin-bottom: -5px;
 }
 
+.displaytag2 table {
+	border: 1px solid #666;
+	width: 100%;
+	margin: 20px 0 20px 0 !important;
+}
+
+.displaytag2 th, .displaytag2 td {
+	padding: 2px 4px 2px 4px !important;
+	text-align: left;
+	vertical-align: top;
+}
+
+.displaytag2 thead tr {
+	background-color: #5959FF;
+}
+
+.displaytag2 th.sorted {
+	background-color: orange;
+}
+
+.displaytag2 th a, .displaytag2 th a:visited {
+	color: black;
+}
+
+.displaytag2 th a:hover {
+	text-decoration: underline;
+	color: black;
+}
+
+.displaytag2 th.sorted a, .displaytag2 th.sortable a {
+	background-position: right;
+	background-repeat: no-repeat;
+	display: block;
+	width: 100%;
+}
+
+.displaytag2 th.sortable a {
+	background-image: url(arrow_off.png);
+}
+
+.displaytag2 th.order1 a {
+	background-image: url(arrow_down.png);
+}
+
+.displaytag2 th.order2 a {
+	background-image: url(arrow_up.png);
+}
+
+.displaytag2 tr.odd {
+	background-color: #fff
+}
+
+.displaytag2 tr.tableRowEven, .displaytag2 tr.even {
+	background-color: #fea
+}
+
+.displaytag2 div.exportlinks {
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	margin: 2px 0 10px 0;
+	width: 95%;
+}
+
+.displaytag2 span.export {
+	padding: 0 4px 1px 20px;
+	display: inline;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.displaytag2 span.excel {
+	background-image: url(ico_file_excel.png);
+	background-repeat: no-repeat;
+}
+
+.displaytag2 span.csv {
+	background-image: url(ico_file_csv.png);
+	background-repeat: no-repeat;
+}
+
+.displaytag2 span.xml {
+	background-image: url(ico_file_xml.png);
+	background-repeat: no-repeat;
+}
+
+.displaytag2 span.pdf {
+	background-image: url(ico_file_pdf.png);
+	background-repeat: no-repeat;
+}
+
+.displaytag2 span.rtf {
+	background-image: url(ico_file_rtf.png);
+	background-repeat: no-repeat;
+}
+
+.displaytag2 span.pagebanner {
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	width: 95%;
+	margin-top: 10px;
+	display: block;
+	border-bottom: none;
+}
+
+.displaytag2 span.pagelinks {
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	width: 95%;
+	display: block;
+	border-top: none;
+	margin-bottom: -5px;
+}
+
 #header a {
 	color: #CF3;
 }

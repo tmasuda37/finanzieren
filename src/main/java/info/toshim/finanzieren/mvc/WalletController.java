@@ -1,8 +1,9 @@
 package info.toshim.finanzieren.mvc;
 
+import info.toshim.finanzieren.domain.Balance;
+import info.toshim.finanzieren.domain.BalancePk;
 import info.toshim.finanzieren.domain.Category;
 import info.toshim.finanzieren.domain.Currency;
-import info.toshim.finanzieren.domain.Kind;
 import info.toshim.finanzieren.domain.Wallet;
 import info.toshim.finanzieren.mvc.core.ListOfDates;
 import info.toshim.finanzieren.repo.BalanceDao;
@@ -68,13 +69,17 @@ public class WalletController
 	public String displayList(Model model)
 	{
 		List<Wallet> listWallet = walletDao.findAll();
+		List<Balance> listBalance = balanceDao.findByUserid("a34256c6bc043f5e081c39cd58fb03f1");
 		model.addAttribute("listWallet", listWallet);
+		model.addAttribute("listBalance", listBalance);
 		return "list";
 	}
 
 	@RequestMapping(value = "/list/{id}/delete", method = RequestMethod.GET)
 	public String deleteList(@PathVariable("id") int id)
 	{
+		Wallet wallet = walletDao.findById(id);
+		this.calcBalanceByDeleteRecord(wallet);
 		walletDao.delete(id);
 		return "redirect:/list";
 	}
@@ -99,22 +104,8 @@ public class WalletController
 	{
 		if (!result.hasErrors())
 		{
-			Kind kind = new Kind(2);
-			wallet.setKind(kind);
 			walletDao.save(wallet);
-			// Balance balance = balanceDao.findByUserId(wallet.getUserid());
-			// if (balance != null)
-			// {
-			// log.info("I found it");
-			// balance.setSum(balance.getSum() + wallet.getAmount());
-			// } else
-			// {
-			// log.info("I don't find it");
-			// balance = new Balance();
-			// balance.setUserid(wallet.getUserid());
-			// balance.setCurrency(wallet.getCurrency());
-			// }
-			// balanceDao.saveOrUpdate(balance);
+			this.calcBalanceByNewRecord(wallet);
 			return "redirect:/exp";
 		} else
 		{
@@ -150,9 +141,8 @@ public class WalletController
 	{
 		if (!result.hasErrors())
 		{
-			Kind kind = new Kind(1);
-			wallet.setKind(kind);
 			walletDao.save(wallet);
+			this.calcBalanceByNewRecord(wallet);
 			return "redirect:/inc";
 		} else
 		{
@@ -166,5 +156,55 @@ public class WalletController
 			model.addAttribute("listWlDate", listWlDate);
 			return "inc";
 		}
+	}
+
+	private void calcBalanceByNewRecord(Wallet wallet)
+	{
+		BalancePk balancePk = new BalancePk(wallet.getUserid(), wallet.getCurrency().getId());
+		Balance balance = balanceDao.findByBalance(balancePk);
+		if (balance == null)
+		{
+			balance = new Balance();
+			balance.setUserid(wallet.getUserid());
+			balance.setCurrencyid(wallet.getCurrency().getId());
+			balance.setCurrency(wallet.getCurrency());
+			balanceDao.save(balance);
+		}
+		Double tmpAmount = 0.0;
+		if (wallet.getKind().getId() % 2 != 0)
+		{
+			tmpAmount = -1 * wallet.getAmount();
+		} else
+		{
+			tmpAmount = wallet.getAmount();
+		}
+		balance.setSum(tmpAmount + balance.getSum());
+		balance.setCurrency(wallet.getCurrency());
+		balanceDao.update(balance);
+	}
+
+	private void calcBalanceByDeleteRecord(Wallet wallet)
+	{
+		BalancePk balancePk = new BalancePk(wallet.getUserid(), wallet.getCurrency().getId());
+		Balance balance = balanceDao.findByBalance(balancePk);
+		if (balance == null)
+		{
+			balance = new Balance();
+			balance.setUserid(wallet.getUserid());
+			balance.setCurrencyid(wallet.getCurrency().getId());
+			balance.setCurrency(wallet.getCurrency());
+			balanceDao.save(balance);
+		}
+		Double tmpAmount = 0.0;
+		if (wallet.getKind().getId() % 2 != 0)
+		{
+			tmpAmount = wallet.getAmount();
+		} else
+		{
+			tmpAmount = -1 * wallet.getAmount();
+		}
+		balance.setSum(tmpAmount + balance.getSum());
+		balance.setCurrency(wallet.getCurrency());
+		balanceDao.update(balance);
 	}
 }

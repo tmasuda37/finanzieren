@@ -15,6 +15,7 @@
       <strong>支出登録 － あなたの財布から支出した記録を残しましょう</strong>
     </p>
     <form:form commandName="regWalletRecord">
+      <form:hidden path="kind.id" value="1" />
       <table width="346" border="1">
         <tr>
           <td width="165">

@@ -4,10 +4,12 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 @Entity
+@IdClass(BalancePk.class)
 public class Balance implements Serializable
 {
 	private static final long serialVersionUID = 1L;
@@ -15,23 +17,18 @@ public class Balance implements Serializable
 	@Id
 	private String userid;
 
-	@OneToOne
-	@JoinColumn
-	private Currency currency;
+	@Id
+	private int currencyid;
 
 	private Double sum = 0.0;
+
+	@ManyToOne
+	@JoinColumn
+	private Currency currency;
 
 	public Balance()
 	{
 		super();
-	}
-
-	public Balance(String userid, Currency currency, Double sum)
-	{
-		super();
-		this.userid = userid;
-		this.currency = currency;
-		this.sum = sum;
 	}
 
 	public String getUserid()
@@ -44,14 +41,14 @@ public class Balance implements Serializable
 		this.userid = userid;
 	}
 
-	public Currency getCurrency()
+	public int getCurrencyid()
 	{
-		return currency;
+		return currencyid;
 	}
 
-	public void setCurrency(Currency currency)
+	public void setCurrencyid(int currencyid)
 	{
-		this.currency = currency;
+		this.currencyid = currencyid;
 	}
 
 	public Double getSum()
@@ -62,5 +59,15 @@ public class Balance implements Serializable
 	public void setSum(Double sum)
 	{
 		this.sum = sum;
+	}
+
+	public Currency getCurrency()
+	{
+		return currency;
+	}
+
+	public void setCurrency(Currency currency)
+	{
+		this.currency = currency;
 	}
 }
