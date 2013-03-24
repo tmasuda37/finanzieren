@@ -4,6 +4,7 @@ import info.toshim.finanzieren.domain.Balance;
 import info.toshim.finanzieren.domain.BalancePk;
 import info.toshim.finanzieren.domain.Category;
 import info.toshim.finanzieren.domain.Currency;
+import info.toshim.finanzieren.domain.Kind;
 import info.toshim.finanzieren.domain.Wallet;
 import info.toshim.finanzieren.mvc.core.ListOfDates;
 import info.toshim.finanzieren.repo.BalanceDao;
@@ -12,6 +13,7 @@ import info.toshim.finanzieren.repo.CurrencyDao;
 import info.toshim.finanzieren.repo.KindDao;
 import info.toshim.finanzieren.repo.WalletDao;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -182,11 +184,19 @@ public class WalletController
 	}
 
 	@RequestMapping(value = "/exp", method = RequestMethod.POST)
-	public String registerExp(@Valid @ModelAttribute("regWalletRecord") Wallet wallet, BindingResult result, Model model)
+	public String registerExp(@Valid @ModelAttribute("regWalletRecord") Wallet wallet, BindingResult result, Model model) throws IllegalAccessException, InvocationTargetException
 	{
 		if (!result.hasErrors())
 		{
 			walletDao.save(wallet);
+			if (wallet.isCard())
+			{
+				wallet.setId(-1);
+				Kind kind = kindDao.findById(4);
+				wallet.setKind(kind);
+				Category category = categoryDao.findById(401);
+				wallet.setCategory(category);
+			}
 			return "redirect:/exp";
 		} else
 		{

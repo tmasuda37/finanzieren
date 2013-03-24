@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -46,6 +47,9 @@ public class Wallet implements Serializable
 
 	@Size(max = 256)
 	private String note;
+
+	@Transient
+	private boolean card;
 
 	public Wallet()
 	{
@@ -145,9 +149,19 @@ public class Wallet implements Serializable
 		this.note = note;
 	}
 
+	public boolean isCard()
+	{
+		return card;
+	}
+
+	public void setCard(boolean card)
+	{
+		this.card = card;
+	}
+
 	@Override
 	public String toString()
 	{
-		return "Wallet [id=" + id + ", userid=" + userid + ", date=" + date + ", kind=" + kind + ", category=" + category + ", amount=" + amount + ", currency=" + currency + ", note=" + note + "]";
+		return "Wallet [id=" + id + ", userid=" + userid + ", date=" + date + ", kind=" + kind + ", category=" + category + ", amount=" + amount + ", currency=" + currency + ", note=" + note + ", card=" + card + "]";
 	}
 }

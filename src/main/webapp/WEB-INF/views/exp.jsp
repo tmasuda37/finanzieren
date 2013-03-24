@@ -24,6 +24,7 @@
               <br>
             </label>
             <form:input path="amount" />
+            <form:checkbox path="card" title="クレジットカード/デビットカード/引落使用"/>
             <form:errors class="invalid" path="amount" />
           </td>
           <td width="165">

@@ -29,6 +29,12 @@ public class Category implements Serializable
 		this.id = -1;
 	}
 
+	public Category(int id)
+	{
+		super();
+		this.id = id;
+	}
+
 	public int getId()
 	{
 		return id;
