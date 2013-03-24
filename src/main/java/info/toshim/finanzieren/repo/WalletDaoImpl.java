@@ -57,4 +57,15 @@ public class WalletDaoImpl implements WalletDao
 		criteria.select(wallet).orderBy(cb.desc(wallet.get("date")));
 		return em.createQuery(criteria).getResultList();
 	}
+
+	public List<Wallet> findAllByCurrencyId(int currencyId)
+	{
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Wallet> criteria = cb.createQuery(Wallet.class);
+		Root<Wallet> wallet = criteria.from(Wallet.class);
+		criteria.select(wallet);
+		criteria.where(cb.equal(wallet.get("currency").get("id"), currencyId));
+		criteria.orderBy(cb.desc(wallet.get("date")));
+		return em.createQuery(criteria).getResultList();
+	}
 }

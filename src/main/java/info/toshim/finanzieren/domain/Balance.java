@@ -1,6 +1,7 @@
 package info.toshim.finanzieren.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -20,7 +21,7 @@ public class Balance implements Serializable
 	@Id
 	private int currencyid;
 
-	private Double sum = 0.0;
+	private BigDecimal sum;
 
 	@ManyToOne
 	@JoinColumn
@@ -51,12 +52,12 @@ public class Balance implements Serializable
 		this.currencyid = currencyid;
 	}
 
-	public Double getSum()
+	public BigDecimal getSum()
 	{
 		return sum;
 	}
 
-	public void setSum(Double sum)
+	public void setSum(BigDecimal sum)
 	{
 		this.sum = sum;
 	}

@@ -12,6 +12,7 @@ import info.toshim.finanzieren.repo.CurrencyDao;
 import info.toshim.finanzieren.repo.KindDao;
 import info.toshim.finanzieren.repo.WalletDao;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -79,33 +80,42 @@ public class WalletController
 	@RequestMapping(value = "/refresh", method = RequestMethod.GET)
 	public String runRefreshBalance(Model model)
 	{
-		Double refreshSum = 0.0;
+		BigDecimal refreshSum;
 		String userid = "a34256c6bc043f5e081c39cd58fb03f1";
-		List<Wallet> listWallet = walletDao.findAll();
-		for (int i = 0; i < listWallet.size(); i++)
+		List<Currency> listCurrency = currencyDao.findAll();
+		log.info("[listCurrency] " + listCurrency.size());
+		for (int i = 0; i < listCurrency.size(); i++)
 		{
-			if (listWallet.get(i).getKind().getId() % 2 != 0)
+			refreshSum = new BigDecimal(0.0);
+			List<Wallet> listWallet = walletDao.findAllByCurrencyId(listCurrency.get(i).getId());
+			log.info("[listWallet] " + listWallet.size());
+			for (int j = 0; j < listWallet.size(); j++)
 			{
-				refreshSum -= listWallet.get(i).getAmount();
+				log.info("[listWallet] " + listWallet.get(j).getAmount());
+				if (listWallet.get(j).getKind().getId() % 2 != 0)
+				{
+					refreshSum = refreshSum.subtract(listWallet.get(j).getAmount());
+				} else
+				{
+					refreshSum = refreshSum.add(listWallet.get(j).getAmount());
+				}
+			}
+			log.info("[Total Sum] ############## " + refreshSum);
+			BalancePk balancePk = new BalancePk(userid, listCurrency.get(i).getId());
+			Balance balance = balanceDao.findByBalance(balancePk);
+			if (balance != null)
+			{
+				balance.setSum(refreshSum);
+				balanceDao.update(balance);
 			} else
 			{
-				refreshSum += listWallet.get(i).getAmount();
+				balance = new Balance();
+				balance.setUserid(userid);
+				balance.setCurrencyid(listCurrency.get(i).getId());
+				balance.setCurrency(listCurrency.get(i));
+				balance.setSum(refreshSum);
+				balanceDao.save(balance);
 			}
-		}
-		BalancePk balancePk = new BalancePk(userid, 1);
-		Balance balance = balanceDao.findByBalance(balancePk);
-		if (balance != null)
-		{
-			balance.setSum(refreshSum);
-			balanceDao.update(balance);
-		} else
-		{
-			balance = new Balance();
-			balance.setUserid(userid);
-			balance.setCurrencyid(1);
-			balance.setCurrency(listWallet.get(1).getCurrency());
-			balance.setSum(refreshSum);
-			balanceDao.save(balance);
 		}
 		return "redirect:/list";
 	}
@@ -153,7 +163,6 @@ public class WalletController
 	public String editList(@Valid @ModelAttribute("regWalletRecord") Wallet wallet, BindingResult result, Model model)
 	{
 		walletDao.update(wallet);
-		this.calcBalanceByNewRecord(wallet);
 		return "redirect:/list";
 	}
 
@@ -178,7 +187,6 @@ public class WalletController
 		if (!result.hasErrors())
 		{
 			walletDao.save(wallet);
-			this.calcBalanceByNewRecord(wallet);
 			return "redirect:/exp";
 		} else
 		{
@@ -215,7 +223,6 @@ public class WalletController
 		if (!result.hasErrors())
 		{
 			walletDao.save(wallet);
-			this.calcBalanceByNewRecord(wallet);
 			return "redirect:/inc";
 		} else
 		{
@@ -252,7 +259,6 @@ public class WalletController
 		if (!result.hasErrors())
 		{
 			walletDao.save(wallet);
-			this.calcBalanceByNewRecord(wallet);
 			return "redirect:/tro";
 		} else
 		{
@@ -289,7 +295,6 @@ public class WalletController
 		if (!result.hasErrors())
 		{
 			walletDao.save(wallet);
-			this.calcBalanceByNewRecord(wallet);
 			return "redirect:/tri";
 		} else
 		{
@@ -303,30 +308,5 @@ public class WalletController
 			model.addAttribute("listWlDate", listWlDate);
 			return "tri";
 		}
-	}
-
-	private void calcBalanceByNewRecord(Wallet wallet)
-	{
-		BalancePk balancePk = new BalancePk(wallet.getUserid(), wallet.getCurrency().getId());
-		Balance balance = balanceDao.findByBalance(balancePk);
-		if (balance == null)
-		{
-			balance = new Balance();
-			balance.setUserid(wallet.getUserid());
-			balance.setCurrencyid(wallet.getCurrency().getId());
-			balance.setCurrency(wallet.getCurrency());
-			balanceDao.save(balance);
-		}
-		Double tmpAmount = 0.0;
-		if (wallet.getKind().getId() % 2 != 0)
-		{
-			tmpAmount = -1 * wallet.getAmount();
-		} else
-		{
-			tmpAmount = wallet.getAmount();
-		}
-		balance.setSum(tmpAmount + balance.getSum());
-		balance.setCurrency(wallet.getCurrency());
-		balanceDao.update(balance);
 	}
 }

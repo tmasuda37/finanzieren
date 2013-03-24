@@ -1,6 +1,7 @@
 package info.toshim.finanzieren.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -37,7 +38,7 @@ public class Wallet implements Serializable
 
 	@NotNull
 	@Digits(fraction = 2, integer = 7)
-	private Double amount;
+	private BigDecimal amount;
 
 	@ManyToOne
 	@JoinColumn
@@ -52,7 +53,7 @@ public class Wallet implements Serializable
 		this.id = -1;
 	}
 
-	public Wallet(String userid, Date date, Kind kind, Category category, Double amount, Currency currency, String note)
+	public Wallet(String userid, Date date, Kind kind, Category category, BigDecimal amount, Currency currency, String note)
 	{
 		super();
 		this.userid = userid;
@@ -114,12 +115,12 @@ public class Wallet implements Serializable
 		this.category = category;
 	}
 
-	public Double getAmount()
+	public BigDecimal getAmount()
 	{
 		return amount;
 	}
 
-	public void setAmount(Double amount)
+	public void setAmount(BigDecimal amount)
 	{
 		this.amount = amount;
 	}
