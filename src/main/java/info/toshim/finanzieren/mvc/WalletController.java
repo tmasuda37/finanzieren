@@ -188,14 +188,18 @@ public class WalletController
 	{
 		if (!result.hasErrors())
 		{
-			walletDao.save(wallet);
 			if (wallet.isCard())
 			{
+				wallet.setNote("Debit/Credit Card");
+				walletDao.save(wallet);
 				wallet.setId(-1);
 				Kind kind = kindDao.findById(4);
 				wallet.setKind(kind);
 				Category category = categoryDao.findById(401);
 				wallet.setCategory(category);
+				walletDao.save(wallet);
+			} else
+			{
 				walletDao.save(wallet);
 			}
 			return "redirect:/exp";
