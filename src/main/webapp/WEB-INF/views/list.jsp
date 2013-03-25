@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>finanzieren</title>
 <link href="<c:url value="/static/resources/css/style.css"/>" rel="stylesheet" type="text/css">
-<script src="http://use.edgefonts.net/alegreya-sc.js"></script>
+<script src="https://use.edgefonts.net/alegreya-sc.js"></script>
 </head>
 <body>
   <jsp:include page="/WEB-INF/views/menu.jsp" />
@@ -35,7 +35,7 @@
             <display:column title="通貨" property="currency.currency" />
             <display:column title="現在所持金" property="sum" />
           </display:table>
-          <a href="/refresh">Refresh</a>
+          <a href="<c:url value="/refresh"/>">Refresh</a>
         </td>
       </tr>
     </table>
