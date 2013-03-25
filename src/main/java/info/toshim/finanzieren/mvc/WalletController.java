@@ -196,6 +196,7 @@ public class WalletController
 				wallet.setKind(kind);
 				Category category = categoryDao.findById(401);
 				wallet.setCategory(category);
+				walletDao.save(wallet);
 			}
 			return "redirect:/exp";
 		} else
