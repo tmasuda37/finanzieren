@@ -35,6 +35,7 @@
             <display:column title="通貨" property="currency.currency" />
             <display:column title="現在所持金" property="sum" />
           </display:table>
+          <a href="/refresh">Refresh</a>
         </td>
       </tr>
     </table>
