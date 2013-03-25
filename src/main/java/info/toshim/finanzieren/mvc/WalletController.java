@@ -190,7 +190,7 @@ public class WalletController
 		{
 			if (wallet.isCard())
 			{
-				wallet.setNote("Debit/Credit Card");
+				wallet.setNote("Debit/Credit Card/Withdrawal");
 				walletDao.save(wallet);
 				wallet.setId(-1);
 				Kind kind = kindDao.findById(4);
