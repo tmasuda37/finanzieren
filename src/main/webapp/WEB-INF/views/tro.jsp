@@ -4,7 +4,6 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>【転出】</title>
 <link href="<c:url value="/static/resources/css/style.css"/>" rel="stylesheet" type="text/css">
 <script src="https://use.edgefonts.net/alegreya-sc.js"></script>
 </head>
