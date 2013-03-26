@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>収入登録</title>
+<title>【収入】</title>
 <link href="<c:url value="/static/resources/css/style.css"/>" rel="stylesheet" type="text/css">
 <script src="https://use.edgefonts.net/alegreya-sc.js"></script>
 </head>
@@ -12,7 +12,7 @@
   <jsp:include page="/WEB-INF/views/menu.jsp" />
   <div id="center">
     <p>
-      <strong>収入登録 － あなたの財布から収入した記録を残しましょう</strong>
+      <strong>【収入】...収入のトランザクションを入力します</strong>
     </p>
     <form:form commandName="regWalletRecord">
       <form:hidden path="kind.id" value="2" />
