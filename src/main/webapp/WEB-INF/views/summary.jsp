@@ -6,7 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="<c:url value="/static/resources/css/style.css"/>" rel="stylesheet" type="text/css">
-<script src="http://use.edgefonts.net/alegreya-sc.js"></script>
+<script src="https://use.edgefonts.net/alegreya-sc.js"></script>
 </head>
 <body>
   <jsp:include page="/WEB-INF/views/menu.jsp" />
