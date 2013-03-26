@@ -69,6 +69,14 @@ public class Wallet implements Serializable
 		this.note = note;
 	}
 
+	public Wallet(Category category, Currency currency, BigDecimal amount)
+	{
+		super();
+		this.category = category;
+		this.currency = currency;
+		this.amount = amount;
+	}
+
 	public int getId()
 	{
 		return id;

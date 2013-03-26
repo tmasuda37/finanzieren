@@ -9,6 +9,14 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class Kind implements Serializable
 {
+	public static final String EXP = "1";
+
+	public static final String INC = "2";
+
+	public static final String TRI = "3";
+
+	public static final String TRO = "4";
+
 	private static final long serialVersionUID = 1L;
 
 	@Id

@@ -79,6 +79,39 @@ public class WalletController
 		return "list";
 	}
 
+	@RequestMapping(value = "/summary", method = RequestMethod.GET)
+	public String displaySummaryAll(@ModelAttribute("regWalletRecord") Wallet wallet, Model model)
+	{
+		ListOfDates listOfDates = new ListOfDates();
+		List<Currency> listWlcurrency = currencyDao.findAll();
+		List<String> listWlDate = listOfDates.getListOfDates(12, ListOfDates.MONTH_MODE);
+		List<Wallet> listWallet = walletDao.getExpSummaryGroupByCategory();
+		model.addAttribute("listWlDate", listWlDate);
+		model.addAttribute("listWallet", listWallet);
+		model.addAttribute("listWlcurrency", listWlcurrency);
+		return "summary";
+	}
+
+	@RequestMapping(value = "/summary", method = RequestMethod.POST)
+	public String displaySummaryByCurrency(@ModelAttribute("regWalletRecord") Wallet wallet, Model model)
+	{
+		ListOfDates listOfDates = new ListOfDates();
+		List<Currency> listWlcurrency = currencyDao.findAll();
+		List<String> listWlDate = listOfDates.getListOfDates(12, ListOfDates.MONTH_MODE);
+		List<Wallet> listWallet = walletDao.getExpSummaryGroupByCategoryWithCurrency(wallet.getDate(), wallet.getCurrency());
+		model.addAttribute("listWlDate", listWlDate);
+		model.addAttribute("listWallet", listWallet);
+		model.addAttribute("listWlcurrency", listWlcurrency);
+		if (wallet.getCurrency() != null)
+		{
+			model.addAttribute("isTotal", true);
+		} else
+		{
+			model.addAttribute("isTotal", false);
+		}
+		return "summary";
+	}
+
 	@RequestMapping(value = "/refresh", method = RequestMethod.GET)
 	public String runRefreshBalance(Model model)
 	{
