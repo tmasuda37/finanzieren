@@ -80,12 +80,14 @@ public class WalletController
 	}
 
 	@RequestMapping(value = "/summary", method = RequestMethod.GET)
-	public String displaySummaryAll(@ModelAttribute("regWalletRecord") Wallet wallet, Model model)
+	public String displaySummaryAllCurrency(Model model)
 	{
 		ListOfDates listOfDates = new ListOfDates();
 		List<Currency> listWlcurrency = currencyDao.findAll();
 		List<String> listWlDate = listOfDates.getListOfDates(12, ListOfDates.MONTH_MODE);
 		List<Wallet> listWallet = walletDao.getExpSummaryGroupByCategory();
+		Wallet wallet = new Wallet();
+		model.addAttribute("regWalletRecord", wallet);
 		model.addAttribute("listWlDate", listWlDate);
 		model.addAttribute("listWallet", listWallet);
 		model.addAttribute("listWlcurrency", listWlcurrency);
@@ -102,7 +104,7 @@ public class WalletController
 		model.addAttribute("listWlDate", listWlDate);
 		model.addAttribute("listWallet", listWallet);
 		model.addAttribute("listWlcurrency", listWlcurrency);
-		if (wallet.getCurrency() != null)
+		if (wallet.getCurrency() != null && wallet.getCurrency().getId() != -1)
 		{
 			model.addAttribute("isTotal", true);
 		} else

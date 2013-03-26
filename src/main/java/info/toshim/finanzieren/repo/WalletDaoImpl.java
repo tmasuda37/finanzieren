@@ -113,7 +113,13 @@ public class WalletDaoImpl implements WalletDao
 		cal.add(Calendar.MONTH, +1);
 		Date nextMonth = cal.getTime();
 		criteria.multiselect(wallet.get("category"), wallet.get("currency"), sumAmount);
-		criteria.where(cb.equal(wallet.get("kind").get("id"), Kind.EXP), cb.equal(wallet.get("currency"), currency), cb.greaterThanOrEqualTo(wallet.get("date").as(Date.class), thisMonth), cb.lessThan(wallet.get("date").as(Date.class), nextMonth));
+		if (currency.getId() != -1)
+		{
+			criteria.where(cb.equal(wallet.get("kind").get("id"), Kind.EXP), cb.equal(wallet.get("currency"), currency), cb.greaterThanOrEqualTo(wallet.get("date").as(Date.class), thisMonth), cb.lessThan(wallet.get("date").as(Date.class), nextMonth));
+		} else
+		{
+			criteria.where(cb.equal(wallet.get("kind").get("id"), Kind.EXP), cb.greaterThanOrEqualTo(wallet.get("date").as(Date.class), thisMonth), cb.lessThan(wallet.get("date").as(Date.class), nextMonth));
+		}
 		criteria.groupBy(wallet.get("currency"), wallet.get("category"));
 		return em.createQuery(criteria).getResultList();
 	}

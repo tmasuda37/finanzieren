@@ -20,6 +20,7 @@
         <form:options items="${listWlDate}" />
       </form:select>
       <form:select path="currency.id" onchange="submit();">
+        <form:option value="-1" label="-- Select Currency --" />
         <form:options items="${listWlcurrency}" itemValue="id" itemLabel="currency" />
       </form:select>
     </form:form>
