@@ -27,9 +27,9 @@
               <form:options items="${listWlcurrency}" itemValue="id" itemLabel="currency" />
             </form:select>
             <br />
-            <a href="<c:url value="/refresh"/>">Refresh</a>
+            <a href="<c:url value="/refresh"/>">現在所持金を更新</a>
             <br />
-            <a href="<c:url value="/refresh2"/>">Refresh2</a>
+            <a href="<c:url value="/refresh2"/>">日次支出小計を更新</a>
           </form:form>
         </td>
         <td valign="top">
@@ -54,8 +54,8 @@
         </td>
         <td valign="top">
           <display:table id="data3" name="listDailyAmount" class="displaytag" requestURI="/list" decorator="org.displaytag.decorator.TotalTableDecorator" pagesize="31">>
-            <display:column title="日付" property="date" sortable="true" format="{0,date,yyyy-MM-dd}" />
-            <display:column title="金額" property="sum" sortable="true" format="{0,Number,#,##0.00}" total="true" style="text-align: right;" />
+            <display:column title="日付" property="date" format="{0,date,yyyy-MM-dd}" />
+            <display:column title="金額" property="sum" format="{0,Number,#,##0.00}" total="true" style="text-align: right;" />
           </display:table>
         </td>
       </tr>
