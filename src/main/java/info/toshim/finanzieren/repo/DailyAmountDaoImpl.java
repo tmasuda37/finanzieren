@@ -2,6 +2,7 @@ package info.toshim.finanzieren.repo;
 
 import info.toshim.finanzieren.domain.Currency;
 import info.toshim.finanzieren.domain.DailyAmount;
+import info.toshim.finanzieren.domain.DailyAmountPk;
 import info.toshim.finanzieren.mvc.core.GetDatesForSql;
 
 import java.util.Date;
@@ -63,6 +64,12 @@ public class DailyAmountDaoImpl implements DailyAmountDao
 	}
 
 	@Override
+	public DailyAmount findByDailyAmount(DailyAmountPk dailyAmountPk)
+	{
+		return em.find(DailyAmount.class, dailyAmountPk);
+	}
+
+	@Override
 	public List<DailyAmount> findAllByUseidCurrencyDate(String userid, Currency currency)
 	{
 		/*
@@ -78,7 +85,7 @@ public class DailyAmountDaoImpl implements DailyAmountDao
 		Root<DailyAmount> dailyAmount = criteria.from(DailyAmount.class);
 		criteria.select(dailyAmount);
 		criteria.where(cb.equal(dailyAmount.get("userid"), userid), cb.equal(dailyAmount.get("currency"), currency), cb.greaterThanOrEqualTo(dailyAmount.get("date").as(Date.class), map.get(GetDatesForSql.HM_KEY_START_DATE)), cb.lessThan(dailyAmount.get("date").as(Date.class), map.get(GetDatesForSql.HM_KEY_END_DATE)));
-		criteria.orderBy(cb.desc(dailyAmount.get("date")));
+		criteria.orderBy(cb.asc(dailyAmount.get("date")));
 		return em.createQuery(criteria).getResultList();
 	}
 }

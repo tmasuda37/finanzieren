@@ -36,13 +36,14 @@ public class DailyAmount implements Serializable
 		super();
 	}
 
-	public DailyAmount(String userid, int currencyid, Date date, BigDecimal sum)
+	public DailyAmount(String userid, int currencyid, Date date, BigDecimal sum, Currency currency)
 	{
 		super();
 		this.userid = userid;
 		this.currencyid = currencyid;
 		this.date = date;
 		this.sum = sum;
+		this.currency = currency;
 	}
 
 	public String getUserid()

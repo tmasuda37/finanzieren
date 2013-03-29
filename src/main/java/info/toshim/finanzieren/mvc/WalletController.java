@@ -99,7 +99,6 @@ public class WalletController
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	public String displayListWithData(@ModelAttribute("regWalletRecord") Wallet wallet, Model model)
 	{
-		log.info("[Wallet] " + wallet.toString());
 		ListOfDates listOfDates = new ListOfDates();
 		List<String> listWlDate = listOfDates.getListOfDates(12, ListOfDates.MONTH_MODE);
 		List<Currency> listWlcurrency = currencyDao.findAll();
@@ -108,16 +107,13 @@ public class WalletController
 		List<DailyAmount> listDailyAmount = null;
 		if (wallet.getDate() != null && wallet.getCurrency().getId() != -1)
 		{
-			log.info("findAllByDateCurrency: " + wallet.getDate() + ", " + wallet.getCurrency());
 			listWallet = walletDao.findAllByDateCurrency(wallet.getDate(), wallet.getCurrency());
 			listDailyAmount = dailyAmountDao.findAllByUseidCurrencyDate("a34256c6bc043f5e081c39cd58fb03f1", wallet.getCurrency());
 		} else if (wallet.getDate() != null)
 		{
-			log.info("findAllByDate: " + wallet.getDate());
 			listWallet = walletDao.findAllByDate(wallet.getDate());
 		} else if (wallet.getCurrency().getId() != -1)
 		{
-			log.info("findAllByCurrency: " + wallet.getCurrency());
 			listWallet = walletDao.findAllByCurrency(wallet.getCurrency());
 			listDailyAmount = dailyAmountDao.findAllByUseidCurrencyDate("a34256c6bc043f5e081c39cd58fb03f1", wallet.getCurrency());
 		}
@@ -174,15 +170,12 @@ public class WalletController
 		BigDecimal refreshSum;
 		String userid = "a34256c6bc043f5e081c39cd58fb03f1";
 		List<Currency> listCurrency = currencyDao.findAll();
-		log.info("[listCurrency] " + listCurrency.size());
 		for (int i = 0; i < listCurrency.size(); i++)
 		{
 			refreshSum = new BigDecimal(0.0);
 			List<Wallet> listWallet = walletDao.findAllByCurrency(listCurrency.get(i));
-			log.info("[listWallet] " + listWallet.size());
 			for (int j = 0; j < listWallet.size(); j++)
 			{
-				log.info("[listWallet] " + listWallet.get(j).getAmount());
 				if (listWallet.get(j).getKind().getId() % 2 != 0)
 				{
 					refreshSum = refreshSum.subtract(listWallet.get(j).getAmount());
@@ -191,7 +184,6 @@ public class WalletController
 					refreshSum = refreshSum.add(listWallet.get(j).getAmount());
 				}
 			}
-			log.info("[Total Sum] ############## " + refreshSum);
 			BalancePk balancePk = new BalancePk(userid, listCurrency.get(i).getId());
 			Balance balance = balanceDao.findByBalance(balancePk);
 			if (balance != null)
@@ -221,24 +213,20 @@ public class WalletController
 		for (int i = 0; i < listCurrency.size(); i++)
 		{
 			int days = DateTools.getNumInDates(map.get(GetDatesForSql.HM_KEY_START_DATE), map.get(GetDatesForSql.HM_KEY_END_DATE));
-			log.info("[Days] " + days);
 			List<DailyAmount> listDailyAmount = new ArrayList<DailyAmount>(days);
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(map.get(GetDatesForSql.HM_KEY_START_DATE));
 			for (int j = 0; j < days; j++)
 			{
-				log.info("[this is called]");
-				listDailyAmount.add(new DailyAmount(userid, listCurrency.get(i).getId(), cal.getTime(), new BigDecimal(0.0)));
+				listDailyAmount.add(new DailyAmount(userid, listCurrency.get(i).getId(), cal.getTime(), new BigDecimal(0.0), listCurrency.get(i)));
 				cal.add(Calendar.DATE, +1);
 			}
 			dailyAmountDao.update(listDailyAmount);
 			List<Wallet> listWallet = walletDao.getDailyAmountSummaryByCurrency(listCurrency.get(i));
-			log.info("[listWallet] " + listWallet.size());
 			listDailyAmount = new ArrayList<DailyAmount>(listWallet.size());
 			for (int j = 0; j < listWallet.size(); j++)
 			{
-				log.info("[this is called2]");
-				listDailyAmount.add(new DailyAmount(userid, listCurrency.get(i).getId(), listWallet.get(i).getDate(), listWallet.get(i).getAmount()));
+				listDailyAmount.add(new DailyAmount(userid, listCurrency.get(i).getId(), listWallet.get(j).getDate(), listWallet.get(j).getAmount(), listCurrency.get(i)));
 			}
 			dailyAmountDao.update(listDailyAmount);
 		}
