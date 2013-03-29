@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="display" uri="http://displaytag.sf.net"%>
 <html>
 <head>
@@ -13,6 +14,15 @@
     <p>
       <strong>【一覧】...すべてのトランザクションを日付降順で表示します</strong>
     </p>
+    <form:form commandName="regWalletRecord">
+      <form:select path="date" onchange="submit();">
+        <form:options items="${listWlDate}" />
+      </form:select>
+      <form:select path="currency.id" onchange="submit();">
+        <form:option value="-1" label="-- Select Currency --" />
+        <form:options items="${listWlcurrency}" itemValue="id" itemLabel="currency" />
+      </form:select>
+    </form:form>
     <table>
       <tr>
         <td valign="top">

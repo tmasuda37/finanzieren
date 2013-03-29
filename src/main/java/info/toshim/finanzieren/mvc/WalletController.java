@@ -72,10 +72,48 @@ public class WalletController
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String displayList(Model model)
 	{
-		List<Wallet> listWallet = walletDao.findAll();
+		Date date = new Date();
+		ListOfDates listOfDates = new ListOfDates();
+		List<String> listWlDate = listOfDates.getListOfDates(12, ListOfDates.MONTH_MODE);
+		List<Currency> listWlcurrency = currencyDao.findAll();
+		List<Wallet> listWallet = walletDao.findAllByDate(date);
 		List<Balance> listBalance = balanceDao.findByUserid("a34256c6bc043f5e081c39cd58fb03f1");
+		model.addAttribute("listWlDate", listWlDate);
+		model.addAttribute("listWlcurrency", listWlcurrency);
 		model.addAttribute("listWallet", listWallet);
 		model.addAttribute("listBalance", listBalance);
+		Wallet wallet = new Wallet();
+		model.addAttribute("regWalletRecord", wallet);
+		return "list";
+	}
+
+	@RequestMapping(value = "/list", method = RequestMethod.POST)
+	public String displayListWithData(@ModelAttribute("regWalletRecord") Wallet wallet, Model model)
+	{
+		log.info("[Wallet] " + wallet.toString());
+		ListOfDates listOfDates = new ListOfDates();
+		List<String> listWlDate = listOfDates.getListOfDates(12, ListOfDates.MONTH_MODE);
+		List<Currency> listWlcurrency = currencyDao.findAll();
+		List<Balance> listBalance = balanceDao.findByUserid("a34256c6bc043f5e081c39cd58fb03f1");
+		List<Wallet> listWallet = null;
+		if (wallet.getDate() != null && wallet.getCurrency().getId() != -1)
+		{
+			log.info("findAllByDateCurrency: " + wallet.getDate() + ", " + wallet.getCurrency());
+			listWallet = walletDao.findAllByDateCurrency(wallet.getDate(), wallet.getCurrency());
+		} else if (wallet.getDate() != null)
+		{
+			log.info("findAllByDate: " + wallet.getDate());
+			listWallet = walletDao.findAllByDate(wallet.getDate());
+		} else if (wallet.getCurrency().getId() != -1)
+		{
+			log.info("findAllByCurrency: " + wallet.getCurrency());
+			listWallet = walletDao.findAllByCurrency(wallet.getCurrency());
+		}
+		model.addAttribute("listWlDate", listWlDate);
+		model.addAttribute("listWlcurrency", listWlcurrency);
+		model.addAttribute("listWallet", listWallet);
+		model.addAttribute("listBalance", listBalance);
+		model.addAttribute("regWalletRecord", wallet);
 		return "list";
 	}
 
@@ -85,7 +123,7 @@ public class WalletController
 		ListOfDates listOfDates = new ListOfDates();
 		List<Currency> listWlcurrency = currencyDao.findAll();
 		List<String> listWlDate = listOfDates.getListOfDates(12, ListOfDates.MONTH_MODE);
-		List<Wallet> listWallet = walletDao.getExpSummaryGroupByCategory();
+		List<Wallet> listWallet = walletDao.getExpSummary();
 		Wallet wallet = new Wallet();
 		model.addAttribute("regWalletRecord", wallet);
 		model.addAttribute("listWlDate", listWlDate);
@@ -100,16 +138,19 @@ public class WalletController
 		ListOfDates listOfDates = new ListOfDates();
 		List<Currency> listWlcurrency = currencyDao.findAll();
 		List<String> listWlDate = listOfDates.getListOfDates(12, ListOfDates.MONTH_MODE);
-		List<Wallet> listWallet = walletDao.getExpSummaryGroupByCategoryWithCurrency(wallet.getDate(), wallet.getCurrency());
+		List<Wallet> listWallet = null;
 		model.addAttribute("listWlDate", listWlDate);
-		model.addAttribute("listWallet", listWallet);
 		model.addAttribute("listWlcurrency", listWlcurrency);
-		if (wallet.getCurrency() != null && wallet.getCurrency().getId() != -1)
+		if (wallet.getCurrency().getId() != -1)
 		{
 			model.addAttribute("isTotal", true);
+			listWallet = walletDao.getExpSummaryByDateCurrency(wallet.getDate(), wallet.getCurrency());
+			model.addAttribute("listWallet", listWallet);
 		} else
 		{
 			model.addAttribute("isTotal", false);
+			listWallet = walletDao.getExpSummaryByDate(wallet.getDate());
+			model.addAttribute("listWallet", listWallet);
 		}
 		return "summary";
 	}
@@ -124,7 +165,7 @@ public class WalletController
 		for (int i = 0; i < listCurrency.size(); i++)
 		{
 			refreshSum = new BigDecimal(0.0);
-			List<Wallet> listWallet = walletDao.findAllByCurrencyId(listCurrency.get(i).getId());
+			List<Wallet> listWallet = walletDao.findAllByCurrency(listCurrency.get(i));
 			log.info("[listWallet] " + listWallet.size());
 			for (int j = 0; j < listWallet.size(); j++)
 			{

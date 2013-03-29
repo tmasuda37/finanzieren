@@ -18,9 +18,15 @@ public interface WalletDao
 
 	public List<Wallet> findAll();
 
-	public List<Wallet> findAllByCurrencyId(int currencyId);
+	public List<Wallet> findAllByCurrency(Currency currency);
 
-	public List<Wallet> getExpSummaryGroupByCategory();
+	public List<Wallet> findAllByDate(Date date);
 
-	public List<Wallet> getExpSummaryGroupByCategoryWithCurrency(Date startDate, Currency currency);
+	public List<Wallet> findAllByDateCurrency(Date date, Currency currency);
+
+	public List<Wallet> getExpSummary();
+
+	public List<Wallet> getExpSummaryByDate(Date date);
+
+	public List<Wallet> getExpSummaryByDateCurrency(Date date, Currency currency);
 }

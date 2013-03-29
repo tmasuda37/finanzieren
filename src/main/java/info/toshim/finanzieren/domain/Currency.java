@@ -20,8 +20,6 @@ public class Currency implements Serializable
 	public Currency()
 	{
 		super();
-		this.id = -1;
-		this.currency = "";
 	}
 
 	public int getId()
