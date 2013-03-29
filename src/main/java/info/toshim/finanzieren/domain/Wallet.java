@@ -77,6 +77,14 @@ public class Wallet implements Serializable
 		this.amount = amount;
 	}
 
+	public Wallet(Date date, Currency currency, BigDecimal amount)
+	{
+		super();
+		this.date = date;
+		this.currency = currency;
+		this.amount = amount;
+	}
+
 	public int getId()
 	{
 		return id;

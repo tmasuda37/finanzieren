@@ -179,4 +179,26 @@ public class WalletDaoImpl implements WalletDao
 		criteria.groupBy(wallet.get("currency"), wallet.get("category"));
 		return em.createQuery(criteria).getResultList();
 	}
+
+	@Override
+	public List<Wallet> getDailyAmountSummaryByCurrency(Currency currency)
+	{
+		/*
+		 * Prepare SQL Input Data
+		 */
+		GetDatesForSql getDatesForSql = new GetDatesForSql();
+		HashMap<String, Date> map = getDatesForSql.getFirstLastDateOfMonth();
+		/*
+		 * Start SQL
+		 */
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Wallet> criteria = cb.createQuery(Wallet.class);
+		Root<Wallet> wallet = criteria.from(Wallet.class);
+		Expression<BigDecimal> sumAmount = cb.sum(wallet.get("amount").as(BigDecimal.class));
+		criteria.multiselect(wallet.get("date"), wallet.get("currency"), sumAmount);
+		criteria.where(cb.equal(wallet.get("kind").get("id"), Kind.EXP), cb.equal(wallet.get("currency"), currency), cb.greaterThanOrEqualTo(wallet.get("date").as(Date.class), map.get(GetDatesForSql.HM_KEY_START_DATE)), cb.lessThan(wallet.get("date").as(Date.class), map.get(GetDatesForSql.HM_KEY_END_DATE)));
+		criteria.groupBy(wallet.get("date"));
+		criteria.orderBy(cb.desc(wallet.get("date")));
+		return em.createQuery(criteria).getResultList();
+	}
 }

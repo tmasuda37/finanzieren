@@ -29,4 +29,6 @@ public interface WalletDao
 	public List<Wallet> getExpSummaryByDate(Date date);
 
 	public List<Wallet> getExpSummaryByDateCurrency(Date date, Currency currency);
+
+	public List<Wallet> getDailyAmountSummaryByCurrency(Currency currency);
 }

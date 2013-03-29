@@ -4,12 +4,16 @@ import info.toshim.finanzieren.domain.Balance;
 import info.toshim.finanzieren.domain.BalancePk;
 import info.toshim.finanzieren.domain.Category;
 import info.toshim.finanzieren.domain.Currency;
+import info.toshim.finanzieren.domain.DailyAmount;
 import info.toshim.finanzieren.domain.Kind;
 import info.toshim.finanzieren.domain.Wallet;
+import info.toshim.finanzieren.mvc.core.DateTools;
+import info.toshim.finanzieren.mvc.core.GetDatesForSql;
 import info.toshim.finanzieren.mvc.core.ListOfDates;
 import info.toshim.finanzieren.repo.BalanceDao;
 import info.toshim.finanzieren.repo.CategoryDao;
 import info.toshim.finanzieren.repo.CurrencyDao;
+import info.toshim.finanzieren.repo.DailyAmountDao;
 import info.toshim.finanzieren.repo.KindDao;
 import info.toshim.finanzieren.repo.WalletDao;
 
@@ -17,7 +21,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -55,6 +61,9 @@ public class WalletController
 
 	@Autowired
 	private BalanceDao balanceDao;
+
+	@Autowired
+	private DailyAmountDao dailyAmountDao;
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder)
@@ -96,10 +105,12 @@ public class WalletController
 		List<Currency> listWlcurrency = currencyDao.findAll();
 		List<Balance> listBalance = balanceDao.findByUserid("a34256c6bc043f5e081c39cd58fb03f1");
 		List<Wallet> listWallet = null;
+		List<DailyAmount> listDailyAmount = null;
 		if (wallet.getDate() != null && wallet.getCurrency().getId() != -1)
 		{
 			log.info("findAllByDateCurrency: " + wallet.getDate() + ", " + wallet.getCurrency());
 			listWallet = walletDao.findAllByDateCurrency(wallet.getDate(), wallet.getCurrency());
+			listDailyAmount = dailyAmountDao.findAllByUseidCurrencyDate("a34256c6bc043f5e081c39cd58fb03f1", wallet.getCurrency());
 		} else if (wallet.getDate() != null)
 		{
 			log.info("findAllByDate: " + wallet.getDate());
@@ -108,11 +119,13 @@ public class WalletController
 		{
 			log.info("findAllByCurrency: " + wallet.getCurrency());
 			listWallet = walletDao.findAllByCurrency(wallet.getCurrency());
+			listDailyAmount = dailyAmountDao.findAllByUseidCurrencyDate("a34256c6bc043f5e081c39cd58fb03f1", wallet.getCurrency());
 		}
 		model.addAttribute("listWlDate", listWlDate);
 		model.addAttribute("listWlcurrency", listWlcurrency);
 		model.addAttribute("listWallet", listWallet);
 		model.addAttribute("listBalance", listBalance);
+		model.addAttribute("listDailyAmount", listDailyAmount);
 		model.addAttribute("regWalletRecord", wallet);
 		return "list";
 	}
@@ -194,6 +207,40 @@ public class WalletController
 				balance.setSum(refreshSum);
 				balanceDao.save(balance);
 			}
+		}
+		return "redirect:/list";
+	}
+
+	@RequestMapping(value = "/refresh2", method = RequestMethod.GET)
+	public String runRefreshDailyAmount(Model model)
+	{
+		String userid = "a34256c6bc043f5e081c39cd58fb03f1";
+		List<Currency> listCurrency = currencyDao.findAll();
+		GetDatesForSql getDatesForSql = new GetDatesForSql();
+		HashMap<String, Date> map = getDatesForSql.getFirstLastDateOfMonth();
+		for (int i = 0; i < listCurrency.size(); i++)
+		{
+			int days = DateTools.getNumInDates(map.get(GetDatesForSql.HM_KEY_START_DATE), map.get(GetDatesForSql.HM_KEY_END_DATE));
+			log.info("[Days] " + days);
+			List<DailyAmount> listDailyAmount = new ArrayList<DailyAmount>(days);
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(map.get(GetDatesForSql.HM_KEY_START_DATE));
+			for (int j = 0; j < days; j++)
+			{
+				log.info("[this is called]");
+				listDailyAmount.add(new DailyAmount(userid, listCurrency.get(i).getId(), cal.getTime(), new BigDecimal(0.0)));
+				cal.add(Calendar.DATE, +1);
+			}
+			dailyAmountDao.update(listDailyAmount);
+			List<Wallet> listWallet = walletDao.getDailyAmountSummaryByCurrency(listCurrency.get(i));
+			log.info("[listWallet] " + listWallet.size());
+			listDailyAmount = new ArrayList<DailyAmount>(listWallet.size());
+			for (int j = 0; j < listWallet.size(); j++)
+			{
+				log.info("[this is called2]");
+				listDailyAmount.add(new DailyAmount(userid, listCurrency.get(i).getId(), listWallet.get(i).getDate(), listWallet.get(i).getAmount()));
+			}
+			dailyAmountDao.update(listDailyAmount);
 		}
 		return "redirect:/list";
 	}
