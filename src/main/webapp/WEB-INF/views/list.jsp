@@ -14,17 +14,24 @@
     <p>
       <strong>【一覧】...すべてのトランザクションを日付降順で表示します</strong>
     </p>
-    <form:form commandName="regWalletRecord">
-      <form:select path="date" onchange="submit();">
-        <form:options items="${listWlDate}" />
-      </form:select>
-      <form:select path="currency.id" onchange="submit();">
-        <form:option value="-1" label="-- Select Currency --" />
-        <form:options items="${listWlcurrency}" itemValue="id" itemLabel="currency" />
-      </form:select>
-    </form:form>
     <table>
       <tr>
+        <td valign="top">
+          <form:form commandName="regWalletRecord">
+            <form:select path="date" onchange="submit();">
+              <form:options items="${listWlDate}" />
+            </form:select>
+            <br />
+            <form:select path="currency.id" onchange="submit();">
+              <form:option value="-1" label="-- Select Currency --" />
+              <form:options items="${listWlcurrency}" itemValue="id" itemLabel="currency" />
+            </form:select>
+            <br />
+            <a href="<c:url value="/refresh"/>">Refresh</a>
+            <br />
+            <a href="<c:url value="/refresh2"/>">Refresh2</a>
+          </form:form>
+        </td>
         <td valign="top">
           <display:table id="data" name="listWallet" class="displaytag" requestURI="/list" sort="list" pagesize="17">
             <display:column title="編集・削除" sortable="true">
@@ -40,18 +47,16 @@
           </display:table>
         </td>
         <td valign="top">
-          <display:table id="data2" name="listBalance" class="displaytag2" requestURI="/list" pagesize="10">
+          <display:table id="data2" name="listBalance" class="displaytag2" requestURI="/list" pagesize="5">
             <display:column title="通貨" property="currency.currency" />
             <display:column title="現在所持金" property="sum" />
           </display:table>
-          <a href="<c:url value="/refresh"/>">Refresh</a>
         </td>
         <td valign="top">
-          <display:table id="data3" name="listDailyAmount" class="displaytag" requestURI="/list" decorator="org.displaytag.decorator.TotalTableDecorator">
+          <display:table id="data3" name="listDailyAmount" class="displaytag" requestURI="/list" decorator="org.displaytag.decorator.TotalTableDecorator" pagesize="31">>
             <display:column title="日付" property="date" sortable="true" format="{0,date,yyyy-MM-dd}" />
             <display:column title="金額" property="sum" sortable="true" format="{0,Number,#,##0.00}" total="true" style="text-align: right;" />
           </display:table>
-          <a href="<c:url value="/refresh2"/>">Refresh2</a>
         </td>
       </tr>
     </table>

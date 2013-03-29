@@ -54,7 +54,7 @@ select {
 #center {
 	position: fixed;
 	left: 50px;
-	top: 70px;
+	top: 60px;
 }
 
 textarea {
@@ -99,6 +99,7 @@ textarea {
 .displaytag th, .displaytag td {
 	padding: 2px 4px 2px 4px !important;
 	text-align: left;
+	font-size: small;
 	vertical-align: top;
 }
 
@@ -215,6 +216,7 @@ textarea {
 .displaytag2 th, .displaytag2 td {
 	padding: 2px 4px 2px 4px !important;
 	text-align: left;
+	font-size: small;
 	vertical-align: top;
 }
 

@@ -14,20 +14,29 @@
     <p>
       <strong>【月次】...【分類】、【通貨】でまとめた支出を表示します</strong>
     </p>
-    <form:form commandName="regWalletRecord">
-      <form:select path="date" onchange="submit();">
-        <form:options items="${listWlDate}" />
-      </form:select>
-      <form:select path="currency.id" onchange="submit();">
-        <form:option value="-1" label="-- Select Currency --" />
-        <form:options items="${listWlcurrency}" itemValue="id" itemLabel="currency" />
-      </form:select>
-    </form:form>
-    <display:table id="data" name="listWallet" class="displaytag" requestURI="/summary" sort="list" decorator="org.displaytag.decorator.TotalTableDecorator" pagesize="17">
-      <display:column title="分類" property="category.category" sortable="true" />
-      <display:column title="通貨" property="currency.currency" sortable="true" />
-      <display:column title="金額" property="amount" sortable="true" format="{0,Number,#,###.00}" total="${isTotal}" style="text-align: right;" />
-    </display:table>
+    <table>
+      <tr>
+        <td valign="top">
+          <form:form commandName="regWalletRecord">
+            <form:select path="date" onchange="submit();">
+              <form:options items="${listWlDate}" />
+            </form:select>
+            <br />
+            <form:select path="currency.id" onchange="submit();">
+              <form:option value="-1" label="-- Select Currency --" />
+              <form:options items="${listWlcurrency}" itemValue="id" itemLabel="currency" />
+            </form:select>
+          </form:form>
+        </td>
+        <td valign="top">
+          <display:table id="data" name="listWallet" class="displaytag" requestURI="/summary" sort="list" decorator="org.displaytag.decorator.TotalTableDecorator" pagesize="17">
+            <display:column title="分類" property="category.category" sortable="true" />
+            <display:column title="通貨" property="currency.currency" sortable="true" />
+            <display:column title="金額" property="amount" sortable="true" format="{0,Number,#,###.00}" total="${isTotal}" style="text-align: right;" />
+          </display:table>
+        </td>
+      </tr>
+    </table>
   </div>
 </body>
 </html>
