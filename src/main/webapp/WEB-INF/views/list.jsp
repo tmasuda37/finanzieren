@@ -33,7 +33,7 @@
         <td valign="top">
           <display:table id="data" name="listSummary" class="displaytag2" decorator="org.displaytag.decorator.TotalTableDecorator">
             <display:column title="分類" property="category.category" />
-            <display:column title="金額" property="amount" sortable="true" format="{0,Number,#,###.00}" total="true" style="text-align: right;" />
+            <display:column title="金額" property="amount" format="{0,Number,#,###.00}" total="true" style="text-align: right;" />
           </display:table>
         </td>
         <td valign="top">
@@ -43,18 +43,17 @@
           </display:table>
         </td>
         <td valign="top">
-          <display:table id="data" name="listWallet" class="displaytag2" requestURI="/list/" sort="list" pagesize="31">
-            <display:setProperty name="paging.banner.placement" value="bottom" />
-            <display:column title="編集・削除" sortable="true">
+          <display:table id="data" name="listWallet" class="displaytag2">
+            <display:column title="編集・削除">
               <a href="<c:url value="/list/${data.id}/edit/"/>"><img src="<c:url value="/static/resources/gfx/edit.png"/>" style="width: 12px;" /></a>・
               <a href="<c:url value="/list/${data.id}/delete/"/>"><img src="<c:url value="/static/resources/gfx/delete.png"/>" style="width: 12px;" /></a>
             </display:column>
-            <display:column title="日付" property="date" sortable="true" format="{0,date,yyyy-MM-dd}" />
-            <display:column title="項目" property="kind.kind" sortable="true" />
-            <display:column title="分類" property="category.category" sortable="true" />
-            <display:column title="通貨" property="currency.currency" sortable="true" />
-            <display:column title="金額" property="amount" sortable="true" style="text-align: right" />
-            <display:column title="備考" property="note" sortable="true" />
+            <display:column title="日付" property="date" format="{0,date,yyyy-MM-dd}" />
+            <display:column title="項目" property="kind.kind" />
+            <display:column title="分類" property="category.category" />
+            <display:column title="通貨" property="currency.currency" />
+            <display:column title="金額" property="amount" style="text-align: right" />
+            <display:column title="備考" property="note" />
           </display:table>
         </td>
       </tr>

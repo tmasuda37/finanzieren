@@ -40,7 +40,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping(value = "/")
@@ -90,7 +89,7 @@ public class WalletController
 		List<Currency> listWlcurrency = currencyDao.findAll();
 		List<DailyAmount> listDailyAmount = dailyAmountDao.findAllByUseidCurrency("a34256c6bc043f5e081c39cd58fb03f1", wallet.getCurrency());
 		List<String> listWlDate = listOfDates.getListOfDates(12, ListOfDates.MONTH_MODE);
-		List<Wallet> listWallet = walletDao.findAllByDate(date);
+		List<Wallet> listWallet = walletDao.findAllByDateCurrency(date, wallet.getCurrency(), 31);
 		List<Wallet> listSummary = walletDao.getExpSummaryByDateCurrency(date, wallet.getCurrency());
 		model.addAttribute("listBalance", listBalance);
 		model.addAttribute("listDailyAmount", listDailyAmount);
@@ -112,7 +111,7 @@ public class WalletController
 		List<Currency> listWlcurrency = currencyDao.findAll();
 		List<DailyAmount> listDailyAmount = dailyAmountDao.findAllByUseidCurrencyDate("a34256c6bc043f5e081c39cd58fb03f1", wallet.getCurrency(), wallet.getDate());
 		List<String> listWlDate = listOfDates.getListOfDates(12, ListOfDates.MONTH_MODE);
-		List<Wallet> listWallet = walletDao.findAllByDateCurrency(wallet.getDate(), wallet.getCurrency());
+		List<Wallet> listWallet = walletDao.findAllByDateCurrency(wallet.getDate(), wallet.getCurrency(), 31);
 		List<Wallet> listSummary = walletDao.getExpSummaryByDateCurrency(wallet.getDate(), wallet.getCurrency());
 		model.addAttribute("listBalance", listBalance);
 		model.addAttribute("listDailyAmount", listDailyAmount);

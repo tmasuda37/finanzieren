@@ -23,6 +23,8 @@ public interface WalletDao
 	public List<Wallet> findAllByDate(Date date);
 
 	public List<Wallet> findAllByDateCurrency(Date date, Currency currency);
+	
+	public List<Wallet> findAllByDateCurrency(Date date, Currency currency, int maxResult);
 
 	public List<Wallet> getExpSummary();
 
