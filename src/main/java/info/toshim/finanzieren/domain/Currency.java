@@ -22,6 +22,12 @@ public class Currency implements Serializable
 		super();
 	}
 
+	public Currency(int id)
+	{
+		super();
+		this.id = id;
+	}
+
 	public int getId()
 	{
 		return id;

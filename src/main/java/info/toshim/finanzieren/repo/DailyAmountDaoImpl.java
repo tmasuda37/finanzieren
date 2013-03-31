@@ -70,13 +70,33 @@ public class DailyAmountDaoImpl implements DailyAmountDao
 	}
 
 	@Override
-	public List<DailyAmount> findAllByUseidCurrencyDate(String userid, Currency currency)
+	public List<DailyAmount> findAllByUseidCurrency(String userid, Currency currency)
 	{
 		/*
 		 * Prepare SQL Input Data
 		 */
 		GetDatesForSql getDatesForSql = new GetDatesForSql();
 		HashMap<String, Date> map = getDatesForSql.getFirstLastDateOfMonth();
+		/*
+		 * Start SQL
+		 */
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<DailyAmount> criteria = cb.createQuery(DailyAmount.class);
+		Root<DailyAmount> dailyAmount = criteria.from(DailyAmount.class);
+		criteria.select(dailyAmount);
+		criteria.where(cb.equal(dailyAmount.get("userid"), userid), cb.equal(dailyAmount.get("currency"), currency), cb.greaterThanOrEqualTo(dailyAmount.get("date").as(Date.class), map.get(GetDatesForSql.HM_KEY_START_DATE)), cb.lessThan(dailyAmount.get("date").as(Date.class), map.get(GetDatesForSql.HM_KEY_END_DATE)));
+		criteria.orderBy(cb.asc(dailyAmount.get("date")));
+		return em.createQuery(criteria).getResultList();
+	}
+
+	@Override
+	public List<DailyAmount> findAllByUseidCurrencyDate(String userid, Currency currency, Date date)
+	{
+		/*
+		 * Prepare SQL Input Data
+		 */
+		GetDatesForSql getDatesForSql = new GetDatesForSql();
+		HashMap<String, Date> map = getDatesForSql.getFirstLastDateOfMonth(date);
 		/*
 		 * Start SQL
 		 */

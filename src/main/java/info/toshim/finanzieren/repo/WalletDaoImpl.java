@@ -181,13 +181,13 @@ public class WalletDaoImpl implements WalletDao
 	}
 
 	@Override
-	public List<Wallet> getDailyAmountSummaryByCurrency(Currency currency)
+	public List<Wallet> getDailyAmountSummaryByCurrencyDate(Currency currency, Date date)
 	{
 		/*
 		 * Prepare SQL Input Data
 		 */
 		GetDatesForSql getDatesForSql = new GetDatesForSql();
-		HashMap<String, Date> map = getDatesForSql.getFirstLastDateOfMonth();
+		HashMap<String, Date> map = getDatesForSql.getFirstLastDateOfMonth(date);
 		/*
 		 * Start SQL
 		 */

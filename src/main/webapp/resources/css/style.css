@@ -1,13 +1,14 @@
 @charset "utf-8";
 
 #header {
+	z-index: 1;
 	background-color: #000;
 	margin: 0px;
 	top: 0px;
 	left: 0px;
 	right: 0px;
-	position: absolute;
-	height: 72px;
+	position: fixed;
+	height: 74px;
 	color: #5959FF;
 	padding-left: 10px;
 	font-size: 44px;
@@ -28,8 +29,9 @@ body {
 }
 
 #bottom {
+	z-index: 1;
 	background-color: #000;
-	position: absolute;
+	position: fixed;
 	left: 0px;
 	right: 0px;
 	bottom: 0px;
@@ -52,9 +54,9 @@ select {
 }
 
 #center {
-	position: fixed;
+	position: relative;
 	left: 50px;
-	top: 60px;
+	top: 80px;
 }
 
 textarea {
