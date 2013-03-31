@@ -44,10 +44,6 @@
         </td>
         <td valign="top">
           <display:table id="data" name="listWallet" class="displaytag2">
-            <display:column title="編集・削除">
-              <a href="<c:url value="/list/${data.id}/edit/"/>"><img src="<c:url value="/static/resources/gfx/edit.png"/>" style="width: 12px;" /></a>・
-              <a href="<c:url value="/list/${data.id}/delete/"/>"><img src="<c:url value="/static/resources/gfx/delete.png"/>" style="width: 12px;" /></a>
-            </display:column>
             <display:column title="日付" property="date" format="{0,date,yyyy-MM-dd}" />
             <display:column title="項目" property="kind.kind" />
             <display:column title="分類" property="category.category" />
