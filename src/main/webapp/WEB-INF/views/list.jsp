@@ -52,6 +52,7 @@
             <display:column title="日付" property="date" sortable="true" format="{0,date,yyyy-MM-dd}" />
             <display:column title="項目" property="kind.kind" sortable="true" />
             <display:column title="分類" property="category.category" sortable="true" />
+            <display:column title="通貨" property="currency.currency" sortable="true" />
             <display:column title="金額" property="amount" sortable="true" style="text-align: right" />
             <display:column title="備考" property="note" sortable="true" />
           </display:table>
