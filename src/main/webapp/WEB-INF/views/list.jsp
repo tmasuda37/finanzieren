@@ -39,7 +39,7 @@
         <td valign="top">
           <display:table id="data2" name="listBalance" class="displaytag">
             <display:column title="通貨" property="currency.currency" />
-            <display:column title="現在所持金" property="sum" />
+            <display:column title="現在所持金" property="sum" style="text-align: right" />
           </display:table>
         </td>
         <td valign="top">
