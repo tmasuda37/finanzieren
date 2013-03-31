@@ -161,7 +161,7 @@ public class WalletController
 	{
 		String userid = "a34256c6bc043f5e081c39cd58fb03f1";
 		GetDatesForSql getDatesForSql = new GetDatesForSql();
-		HashMap<String, Date> map = getDatesForSql.getFirstLastDateOfMonth();
+		HashMap<String, Date> map = getDatesForSql.getFirstLastDateOfMonth(wallet.getDate());
 		int days = DateTools.getNumInDates(map.get(GetDatesForSql.HM_KEY_START_DATE), map.get(GetDatesForSql.HM_KEY_END_DATE));
 		List<DailyAmount> listDailyAmount = new ArrayList<DailyAmount>(days);
 		Calendar cal = Calendar.getInstance();
