@@ -78,6 +78,16 @@ public class WalletController
 		return "redirect:/list";
 	}
 
+	@RequestMapping(value = "/edit", method = RequestMethod.GET)
+	public String displayEdit(Model model)
+	{
+		Wallet wallet = new Wallet();
+		List<Wallet> listWallet = walletDao.findAll();
+		model.addAttribute("listWallet", listWallet);
+		model.addAttribute("regWalletRecord", wallet);
+		return "edit";
+	}
+
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String displayList(Model model)
 	{
@@ -184,7 +194,7 @@ public class WalletController
 	public String deleteList(@PathVariable("id") int id)
 	{
 		walletDao.delete(id);
-		return "redirect:/refresh";
+		return "redirect:/edit";
 	}
 
 	@RequestMapping(value = "/list/{id}/edit", method = RequestMethod.GET)
@@ -223,7 +233,7 @@ public class WalletController
 	public String editList(@Valid @ModelAttribute("regWalletRecord") Wallet wallet, BindingResult result, Model model)
 	{
 		walletDao.update(wallet);
-		return "redirect:/list";
+		return "redirect:/edit";
 	}
 
 	@RequestMapping(value = "/exp", method = RequestMethod.GET)
