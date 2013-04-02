@@ -17,8 +17,13 @@
     <table>
       <tr>
         <td valign="top">
-          <display:table id="data" name="listWallet" class="displaytag2" requestURI="/edit" sort="list" pagesize="100">
-            <display:column title="編集・削除" sortable="true">
+          <display:table id="data" name="listWallet" class="displaytag2" requestURI="/edit" sort="list" pagesize="20" export="true">
+            <display:setProperty name="export.excel" value="false" />
+            <display:setProperty name="export.csv" value="false" />
+            <display:setProperty name="export.xml" value="true" />
+            <display:setProperty name="export.xml.filename" value="finanzieren.xml" />
+            <display:setProperty name="export.xml.include_header" value="false" />
+            <display:column title="編集・削除" sortable="true" media="html">
               <a href="<c:url value="/list/${data.id}/edit/"/>"><img src="<c:url value="/static/resources/gfx/edit.png"/>" style="width: 12px;" /></a>・
               <a href="<c:url value="/list/${data.id}/delete/"/>"><img src="<c:url value="/static/resources/gfx/delete.png"/>" style="width: 12px;" /></a>
             </display:column>

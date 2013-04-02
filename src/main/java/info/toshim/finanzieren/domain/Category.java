@@ -26,7 +26,6 @@ public class Category implements Serializable
 	public Category()
 	{
 		super();
-		this.id = -1;
 	}
 
 	public Category(int id)

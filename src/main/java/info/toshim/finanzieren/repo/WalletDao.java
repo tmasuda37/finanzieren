@@ -1,5 +1,6 @@
 package info.toshim.finanzieren.repo;
 
+import info.toshim.finanzieren.domain.Category;
 import info.toshim.finanzieren.domain.Currency;
 import info.toshim.finanzieren.domain.Wallet;
 
@@ -23,7 +24,9 @@ public interface WalletDao
 	public List<Wallet> findAllByDate(Date date);
 
 	public List<Wallet> findAllByDateCurrency(Date date, Currency currency);
-	
+
+	public List<Wallet> findAllByDateCategoryCurrency(Date date, Category category, Currency currency);
+
 	public List<Wallet> findAllByDateCurrency(Date date, Currency currency, int maxResult);
 
 	public List<Wallet> getExpSummary();

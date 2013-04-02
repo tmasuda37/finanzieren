@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="display" uri="http://displaytag.sf.net"%>
 <html>
@@ -25,15 +26,25 @@
     <table>
       <tr>
         <td valign="top">
-          <display:table id="data3" name="listDailyAmount" class="displaytag" decorator="org.displaytag.decorator.TotalTableDecorator">
+          <display:table id="data3" name="listDailyAmount" class="displaytag">
             <display:column title="日付" property="date" format="{0,date,yyyy-MM-dd}" />
-            <display:column title="金額" property="sum" format="{0,Number,#,##0.00}" total="true" style="text-align: right;" />
+            <display:column title="金額" style="text-align: right;">
+              <c:set var="formedDate">
+                <fmt:formatDate value="${data3.date}" pattern="yyyy-MM-dd" />
+              </c:set>
+              <a href="<c:url value="/list/${formedDate}/${data3.currency.id}"/>">${data3.sum}</a>
+            </display:column>
           </display:table>
         </td>
         <td valign="top">
-          <display:table id="data" name="listSummary" class="displaytag2" decorator="org.displaytag.decorator.TotalTableDecorator">
+          <display:table id="data" name="listSummary" class="displaytag2">
             <display:column title="分類" property="category.category" />
-            <display:column title="金額" property="amount" format="{0,Number,#,###.00}" total="true" style="text-align: right;" />
+            <display:column title="金額" style="text-align: right;">
+              <c:set var="formedDate2">
+                <fmt:formatDate value="${regWalletRecord.date}" pattern="yyyy-MM-dd" />
+              </c:set>
+              <a href="<c:url value="/list/${formedDate2}/${data.category.id}/${data.currency.id}"/>">${data.amount}</a>
+            </display:column>
           </display:table>
         </td>
         <td valign="top">

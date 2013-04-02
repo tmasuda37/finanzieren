@@ -28,7 +28,6 @@ public class Kind implements Serializable
 	public Kind()
 	{
 		super();
-		this.id = -1;
 	}
 
 	public Kind(int id)

@@ -54,7 +54,6 @@ public class Wallet implements Serializable
 	public Wallet()
 	{
 		super();
-		this.id = -1;
 	}
 
 	public Wallet(String userid, Date date, Kind kind, Category category, BigDecimal amount, Currency currency, String note)

@@ -19,6 +19,7 @@ import info.toshim.finanzieren.repo.WalletDao;
 
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -81,10 +82,24 @@ public class WalletController
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public String displayEdit(Model model)
 	{
-		Wallet wallet = new Wallet();
 		List<Wallet> listWallet = walletDao.findAll();
 		model.addAttribute("listWallet", listWallet);
-		model.addAttribute("regWalletRecord", wallet);
+		return "edit";
+	}
+
+	@RequestMapping(value = "/list/{strDate}/{currencyId}", method = RequestMethod.GET)
+	public String displayEdit(@PathVariable("strDate") String strDate, @PathVariable("currencyId") int currencyId, Model model) throws ParseException
+	{
+		List<Wallet> listWallet = walletDao.findAllByDateCurrency(DateTools.getDateFromStrDate(strDate), new Currency(currencyId));
+		model.addAttribute("listWallet", listWallet);
+		return "edit";
+	}
+
+	@RequestMapping(value = "/list/{strDate}/{categoryId}/{currencyId}", method = RequestMethod.GET)
+	public String displayEdit(@PathVariable("strDate") String strDate, @PathVariable("categoryId") int categoryId, @PathVariable("currencyId") int currencyId, Model model) throws ParseException
+	{
+		List<Wallet> listWallet = walletDao.findAllByDateCategoryCurrency(DateTools.getDateFromStrDate(strDate), new Category(categoryId), new Currency(currencyId));
+		model.addAttribute("listWallet", listWallet);
 		return "edit";
 	}
 
@@ -95,12 +110,13 @@ public class WalletController
 		ListOfDates listOfDates = new ListOfDates();
 		Wallet wallet = new Wallet();
 		wallet.setCurrency(new Currency(1));
+		wallet.setDate(date);
 		List<Balance> listBalance = balanceDao.findByUserid("a34256c6bc043f5e081c39cd58fb03f1");
 		List<Currency> listWlcurrency = currencyDao.findAll();
 		List<DailyAmount> listDailyAmount = dailyAmountDao.findAllByUseidCurrency("a34256c6bc043f5e081c39cd58fb03f1", wallet.getCurrency());
 		List<String> listWlDate = listOfDates.getListOfDates(12, ListOfDates.MONTH_MODE);
-		List<Wallet> listWallet = walletDao.findAllByDateCurrency(date, wallet.getCurrency(), 31);
-		List<Wallet> listSummary = walletDao.getExpSummaryByDateCurrency(date, wallet.getCurrency());
+		List<Wallet> listWallet = walletDao.findAllByDateCurrency(wallet.getDate(), wallet.getCurrency(), 31);
+		List<Wallet> listSummary = walletDao.getExpSummaryByDateCurrency(wallet.getDate(), wallet.getCurrency());
 		model.addAttribute("listBalance", listBalance);
 		model.addAttribute("listDailyAmount", listDailyAmount);
 		model.addAttribute("listSummary", listSummary);
