@@ -47,7 +47,6 @@ public class WalletDaoImpl implements WalletDao
 
 	public void delete(int id)
 	{
-		findById(id);
 		em.remove(findById(id));
 		return;
 	}
@@ -102,18 +101,13 @@ public class WalletDaoImpl implements WalletDao
 	public List<Wallet> findAllByDateCurrency(Date date, Currency currency)
 	{
 		/*
-		 * Prepare SQL Input Data
-		 */
-		GetDatesForSql getDatesForSql = new GetDatesForSql();
-		HashMap<String, Date> map = getDatesForSql.getFirstLastDateOfMonth(date);
-		/*
 		 * Start SQL
 		 */
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Wallet> criteria = cb.createQuery(Wallet.class);
 		Root<Wallet> wallet = criteria.from(Wallet.class);
 		criteria.select(wallet);
-		criteria.where(cb.equal(wallet.get("currency"), currency), cb.greaterThanOrEqualTo(wallet.get("date").as(Date.class), map.get(GetDatesForSql.HM_KEY_START_DATE)), cb.lessThan(wallet.get("date").as(Date.class), map.get(GetDatesForSql.HM_KEY_END_DATE)));
+		criteria.where(cb.equal(wallet.get("currency"), currency), cb.equal(wallet.get("date"), date));
 		criteria.orderBy(cb.desc(wallet.get("date")));
 		return em.createQuery(criteria).getResultList();
 	}

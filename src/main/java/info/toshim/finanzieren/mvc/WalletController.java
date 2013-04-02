@@ -41,9 +41,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
 @RequestMapping(value = "/")
+@SessionAttributes("sessionListWallet")
 public class WalletController
 {
 	private static final Logger log = Logger.getLogger(WalletController.class);
@@ -73,38 +75,45 @@ public class WalletController
 		binder.registerCustomEditor(Date.class, editor);
 	}
 
+	/**
+	 * FINANZIERENをクリックした時に実行される
+	 * 
+	 * @return
+	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String displayStatus(Model model)
+	public String root()
 	{
 		return "redirect:/list";
 	}
 
-	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public String displayEdit(Model model)
+	/**
+	 * Refreshをクリックした時に実行される
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/refresh", method = RequestMethod.GET)
+	public String refreshAll()
 	{
-		List<Wallet> listWallet = walletDao.findAll();
-		model.addAttribute("listWallet", listWallet);
-		return "edit";
+		Wallet wallet = new Wallet();
+		wallet.setDate(new Date());
+		List<Currency> listCurrency = currencyDao.findAll();
+		for (int i = 0; i < listCurrency.size(); i++)
+		{
+			wallet.setCurrency(listCurrency.get(i));
+			runRefreshBalance(wallet);
+			runRefreshDailyAmount(wallet);
+		}
+		return "redirect:/list";
 	}
 
-	@RequestMapping(value = "/list/{strDate}/{currencyId}", method = RequestMethod.GET)
-	public String displayEdit(@PathVariable("strDate") String strDate, @PathVariable("currencyId") int currencyId, Model model) throws ParseException
-	{
-		List<Wallet> listWallet = walletDao.findAllByDateCurrency(DateTools.getDateFromStrDate(strDate), new Currency(currencyId));
-		model.addAttribute("listWallet", listWallet);
-		return "edit";
-	}
-
-	@RequestMapping(value = "/list/{strDate}/{categoryId}/{currencyId}", method = RequestMethod.GET)
-	public String displayEdit(@PathVariable("strDate") String strDate, @PathVariable("categoryId") int categoryId, @PathVariable("currencyId") int currencyId, Model model) throws ParseException
-	{
-		List<Wallet> listWallet = walletDao.findAllByDateCategoryCurrency(DateTools.getDateFromStrDate(strDate), new Category(categoryId), new Currency(currencyId));
-		model.addAttribute("listWallet", listWallet);
-		return "edit";
-	}
-
+	/**
+	 * FINANZIEREN、または、編集をクリックした時に実行される
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String displayList(Model model)
+	public String displayInfo(Model model)
 	{
 		Date date = new Date();
 		ListOfDates listOfDates = new ListOfDates();
@@ -127,8 +136,15 @@ public class WalletController
 		return "list";
 	}
 
+	/**
+	 * 一覧画面で日時、または、通貨を選択した時に実行される
+	 * 
+	 * @param wallet
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
-	public String displayListWithData(@ModelAttribute("regWalletRecord") Wallet wallet, Model model)
+	public String displayInfoWithDateCurrency(@ModelAttribute("regWalletRecord") Wallet wallet, Model model)
 	{
 		ListOfDates listOfDates = new ListOfDates();
 		runRefreshBalance(wallet);
@@ -149,72 +165,88 @@ public class WalletController
 		return "list";
 	}
 
-	private void runRefreshBalance(Wallet wallet)
+	/**
+	 * 編集をクリックした時に実行される
+	 * 
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/list/edit", method = RequestMethod.GET)
+	public String displayListWithEdit(Model model)
 	{
-		BigDecimal refreshSum;
-		String userid = "a34256c6bc043f5e081c39cd58fb03f1";
-		refreshSum = new BigDecimal(0.0);
-		List<Wallet> listWallet = walletDao.findAllByCurrency(wallet.getCurrency());
-		for (int j = 0; j < listWallet.size(); j++)
-		{
-			if (listWallet.get(j).getKind().getId() % 2 != 0)
-			{
-				refreshSum = refreshSum.subtract(listWallet.get(j).getAmount());
-			} else
-			{
-				refreshSum = refreshSum.add(listWallet.get(j).getAmount());
-			}
-		}
-		BalancePk balancePk = new BalancePk(userid, wallet.getCurrency().getId());
-		Balance balance = balanceDao.findByBalance(balancePk);
-		if (balance != null)
-		{
-			balance.setSum(refreshSum);
-			balanceDao.update(balance);
-		} else
-		{
-			balance = new Balance();
-			balance.setUserid(userid);
-			balance.setCurrencyid(wallet.getCurrency().getId());
-			balance.setCurrency(wallet.getCurrency());
-			balance.setSum(refreshSum);
-			balanceDao.save(balance);
-		}
+		List<Wallet> listWallet = walletDao.findAll();
+		model.addAttribute("sessionListWallet", listWallet);
+		return "edit";
 	}
 
-	private void runRefreshDailyAmount(Wallet wallet)
+	/**
+	 * displaytagの操作によって実行される（元データを更新させない）
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/session", method = RequestMethod.GET)
+	public String displayListWithEditBySession()
 	{
-		String userid = "a34256c6bc043f5e081c39cd58fb03f1";
-		GetDatesForSql getDatesForSql = new GetDatesForSql();
-		HashMap<String, Date> map = getDatesForSql.getFirstLastDateOfMonth(wallet.getDate());
-		int days = DateTools.getNumInDates(map.get(GetDatesForSql.HM_KEY_START_DATE), map.get(GetDatesForSql.HM_KEY_END_DATE));
-		List<DailyAmount> listDailyAmount = new ArrayList<DailyAmount>(days);
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(map.get(GetDatesForSql.HM_KEY_START_DATE));
-		for (int j = 0; j < days; j++)
-		{
-			listDailyAmount.add(new DailyAmount(userid, wallet.getCurrency().getId(), cal.getTime(), new BigDecimal(0.0), wallet.getCurrency()));
-			cal.add(Calendar.DATE, +1);
-		}
-		dailyAmountDao.update(listDailyAmount);
-		List<Wallet> listWallet = walletDao.getDailyAmountSummaryByCurrencyDate(wallet.getCurrency(), wallet.getDate());
-		listDailyAmount = new ArrayList<DailyAmount>(listWallet.size());
-		for (int j = 0; j < listWallet.size(); j++)
-		{
-			listDailyAmount.add(new DailyAmount(userid, wallet.getCurrency().getId(), listWallet.get(j).getDate(), listWallet.get(j).getAmount(), wallet.getCurrency()));
-		}
-		dailyAmountDao.update(listDailyAmount);
+		return "edit";
 	}
 
-	@RequestMapping(value = "/list/{id}/delete", method = RequestMethod.GET)
-	public String deleteList(@PathVariable("id") int id)
+	/**
+	 * 日次集計の金額をクリックした時に実行される
+	 * 
+	 * @param strDate
+	 * @param currencyId
+	 * @param model
+	 * @return
+	 * @throws ParseException
+	 */
+	@RequestMapping(value = "/list/{strDate}/{currencyId}", method = RequestMethod.GET)
+	public String displayListWithEdit(@PathVariable("strDate") String strDate, @PathVariable("currencyId") int currencyId, Model model) throws ParseException
+	{
+		List<Wallet> listWallet = walletDao.findAllByDateCurrency(DateTools.getDateFromStrDate(strDate), new Currency(currencyId));
+		model.addAttribute("sessionListWallet", listWallet);
+		return "edit";
+	}
+
+	/**
+	 * カテゴリー集計の金額をクリックした時に実行される
+	 * 
+	 * @param strDate
+	 * @param categoryId
+	 * @param currencyId
+	 * @param model
+	 * @return
+	 * @throws ParseException
+	 */
+	@RequestMapping(value = "/list/{strDate}/{categoryId}/{currencyId}", method = RequestMethod.GET)
+	public String displayListWithEdit(@PathVariable("strDate") String strDate, @PathVariable("categoryId") int categoryId, @PathVariable("currencyId") int currencyId, Model model) throws ParseException
+	{
+		List<Wallet> listWallet = walletDao.findAllByDateCategoryCurrency(DateTools.getDateFromStrDate(strDate), new Category(categoryId), new Currency(currencyId));
+		model.addAttribute("sessionListWallet", listWallet);
+		return "edit";
+	}
+
+	/**
+	 * 削除アイコンをクリックした時に実行される
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/list/delete/{id}", method = RequestMethod.GET)
+	public String deleteWallet(@PathVariable("id") int id)
 	{
 		walletDao.delete(id);
-		return "redirect:/edit";
+		return displayListWithEditBySession();
 	}
 
-	@RequestMapping(value = "/list/{id}/edit", method = RequestMethod.GET)
-	public String editList(@PathVariable("id") int id, Model model)
+	/**
+	 * 編集アイコンをクリックした時に実行され、支出、収入、転出、または、転入の編集画面へ接続する
+	 * 
+	 * @param id
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/list/edit/{id}", method = RequestMethod.GET)
+	public String editWallet(@PathVariable("id") int id, Model model)
 	{
 		Wallet wallet = walletDao.findById(id);
 		String retPath = "";
@@ -245,13 +277,27 @@ public class WalletController
 		return retPath;
 	}
 
-	@RequestMapping(value = "/list/{id}/edit", method = RequestMethod.POST)
+	/**
+	 * 支出、収入、転出、または、転入の編集画面から再登録した時に実行される
+	 * 
+	 * @param wallet
+	 * @param result
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/list/edit/{id}", method = RequestMethod.POST)
 	public String editList(@Valid @ModelAttribute("regWalletRecord") Wallet wallet, BindingResult result, Model model)
 	{
 		walletDao.update(wallet);
-		return "redirect:/edit";
+		return displayListWithEditBySession();
 	}
 
+	/**
+	 * 支出をクリックした時に実行される
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/exp", method = RequestMethod.GET)
 	public String displayExp(Model model)
 	{
@@ -267,6 +313,16 @@ public class WalletController
 		return "exp";
 	}
 
+	/**
+	 * 支出画面で登録した時に実行される
+	 * 
+	 * @param wallet
+	 * @param result
+	 * @param model
+	 * @return
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
 	@RequestMapping(value = "/exp", method = RequestMethod.POST)
 	public String registerExp(@Valid @ModelAttribute("regWalletRecord") Wallet wallet, BindingResult result, Model model) throws IllegalAccessException, InvocationTargetException
 	{
@@ -301,6 +357,12 @@ public class WalletController
 		}
 	}
 
+	/**
+	 * 収入をクリックした時に実行される
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/inc", method = RequestMethod.GET)
 	public String displayInc(Model model)
 	{
@@ -316,6 +378,14 @@ public class WalletController
 		return "inc";
 	}
 
+	/**
+	 * 収入画面で登録した時に実行される
+	 * 
+	 * @param wallet
+	 * @param result
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/inc", method = RequestMethod.POST)
 	public String registerInc(@Valid @ModelAttribute("regWalletRecord") Wallet wallet, BindingResult result, Model model)
 	{
@@ -337,6 +407,12 @@ public class WalletController
 		}
 	}
 
+	/**
+	 * 転出をクリックをした時に実行される
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/tro", method = RequestMethod.GET)
 	public String displayTro(Model model)
 	{
@@ -352,6 +428,14 @@ public class WalletController
 		return "tro";
 	}
 
+	/**
+	 * 転出画面で登録した時に実行される
+	 * 
+	 * @param wallet
+	 * @param result
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/tro", method = RequestMethod.POST)
 	public String registerTro(@Valid @ModelAttribute("regWalletRecord") Wallet wallet, BindingResult result, Model model)
 	{
@@ -373,6 +457,12 @@ public class WalletController
 		}
 	}
 
+	/**
+	 * 転入をクリックした時に実行される
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/tri", method = RequestMethod.GET)
 	public String displayTri(Model model)
 	{
@@ -388,6 +478,14 @@ public class WalletController
 		return "tri";
 	}
 
+	/**
+	 * 転入画面で登録した時に実行される
+	 * 
+	 * @param wallet
+	 * @param result
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/tri", method = RequestMethod.POST)
 	public String registerTri(@Valid @ModelAttribute("regWalletRecord") Wallet wallet, BindingResult result, Model model)
 	{
@@ -407,5 +505,72 @@ public class WalletController
 			model.addAttribute("listWlDate", listWlDate);
 			return "tri";
 		}
+	}
+
+	/**
+	 * 分類集計の時に実行される
+	 * 
+	 * @param wallet
+	 */
+	private void runRefreshBalance(Wallet wallet)
+	{
+		BigDecimal refreshSum;
+		String userid = "a34256c6bc043f5e081c39cd58fb03f1";
+		refreshSum = new BigDecimal(0.0);
+		List<Wallet> listWallet = walletDao.findAllByCurrency(wallet.getCurrency());
+		for (int j = 0; j < listWallet.size(); j++)
+		{
+			if (listWallet.get(j).getKind().getId() % 2 != 0)
+			{
+				refreshSum = refreshSum.subtract(listWallet.get(j).getAmount());
+			} else
+			{
+				refreshSum = refreshSum.add(listWallet.get(j).getAmount());
+			}
+		}
+		BalancePk balancePk = new BalancePk(userid, wallet.getCurrency().getId());
+		Balance balance = balanceDao.findByBalance(balancePk);
+		if (balance != null)
+		{
+			balance.setSum(refreshSum);
+			balanceDao.update(balance);
+		} else
+		{
+			balance = new Balance();
+			balance.setUserid(userid);
+			balance.setCurrencyid(wallet.getCurrency().getId());
+			balance.setCurrency(wallet.getCurrency());
+			balance.setSum(refreshSum);
+			balanceDao.save(balance);
+		}
+	}
+
+	/**
+	 * 日次集計の時に実行される
+	 * 
+	 * @param wallet
+	 */
+	private void runRefreshDailyAmount(Wallet wallet)
+	{
+		String userid = "a34256c6bc043f5e081c39cd58fb03f1";
+		GetDatesForSql getDatesForSql = new GetDatesForSql();
+		HashMap<String, Date> map = getDatesForSql.getFirstLastDateOfMonth(wallet.getDate());
+		int days = DateTools.getNumInDates(map.get(GetDatesForSql.HM_KEY_START_DATE), map.get(GetDatesForSql.HM_KEY_END_DATE));
+		List<DailyAmount> listDailyAmount = new ArrayList<DailyAmount>(days);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(map.get(GetDatesForSql.HM_KEY_START_DATE));
+		for (int j = 0; j < days; j++)
+		{
+			listDailyAmount.add(new DailyAmount(userid, wallet.getCurrency().getId(), cal.getTime(), new BigDecimal(0.0), wallet.getCurrency()));
+			cal.add(Calendar.DATE, +1);
+		}
+		dailyAmountDao.update(listDailyAmount);
+		List<Wallet> listWallet = walletDao.getDailyAmountSummaryByCurrencyDate(wallet.getCurrency(), wallet.getDate());
+		listDailyAmount = new ArrayList<DailyAmount>(listWallet.size());
+		for (int j = 0; j < listWallet.size(); j++)
+		{
+			listDailyAmount.add(new DailyAmount(userid, wallet.getCurrency().getId(), listWallet.get(j).getDate(), listWallet.get(j).getAmount(), wallet.getCurrency()));
+		}
+		dailyAmountDao.update(listDailyAmount);
 	}
 }

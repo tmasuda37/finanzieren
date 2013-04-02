@@ -6,7 +6,7 @@
   <div id="menu">
     <ul>
       <li><a href="<c:url value="/list"/>">一覧</a></li>
-      <li><a href="<c:url value="/edit"/>">編集</a></li>
+      <li><a href="<c:url value="/list/edit"/>">編集</a></li>
       <li><a href="<c:url value="/exp"/>">支出</a></li>
       <li><a href="<c:url value="/inc"/>">収入</a></li>
       <li><a href="<c:url value="/tro"/>">転出</a></li>
