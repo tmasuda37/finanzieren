@@ -8,6 +8,7 @@ import info.toshim.finanzieren.domain.DailyAmount;
 import info.toshim.finanzieren.domain.Kind;
 import info.toshim.finanzieren.domain.Wallet;
 import info.toshim.finanzieren.mvc.core.DateTools;
+import info.toshim.finanzieren.mvc.core.FinanzierenTools;
 import info.toshim.finanzieren.mvc.core.GetDatesForSql;
 import info.toshim.finanzieren.mvc.core.ListOfDates;
 import info.toshim.finanzieren.repo.BalanceDao;
@@ -27,6 +28,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.jboss.logging.Logger;
@@ -172,10 +175,12 @@ public class WalletController
 	 * @return
 	 */
 	@RequestMapping(value = "/list/edit", method = RequestMethod.GET)
-	public String displayListWithEdit(Model model)
+	public String displayListWithEdit(Model model, HttpServletRequest request)
 	{
 		List<Wallet> listWallet = walletDao.findAll();
 		model.addAttribute("sessionListWallet", listWallet);
+		HttpSession session = request.getSession();
+		session.setAttribute("dataUrl", request.getRequestURI());
 		return "edit";
 	}
 
@@ -200,10 +205,12 @@ public class WalletController
 	 * @throws ParseException
 	 */
 	@RequestMapping(value = "/list/{strDate}/{currencyId}", method = RequestMethod.GET)
-	public String displayListWithEdit(@PathVariable("strDate") String strDate, @PathVariable("currencyId") int currencyId, Model model) throws ParseException
+	public String displayListWithEdit(@PathVariable("strDate") String strDate, @PathVariable("currencyId") int currencyId, Model model, HttpServletRequest request) throws ParseException
 	{
 		List<Wallet> listWallet = walletDao.findAllByDateCurrency(DateTools.getDateFromStrDate(strDate), new Currency(currencyId));
 		model.addAttribute("sessionListWallet", listWallet);
+		HttpSession session = request.getSession();
+		session.setAttribute("dataUrl", request.getRequestURI());
 		return "edit";
 	}
 
@@ -218,10 +225,12 @@ public class WalletController
 	 * @throws ParseException
 	 */
 	@RequestMapping(value = "/list/{strDate}/{categoryId}/{currencyId}", method = RequestMethod.GET)
-	public String displayListWithEdit(@PathVariable("strDate") String strDate, @PathVariable("categoryId") int categoryId, @PathVariable("currencyId") int currencyId, Model model) throws ParseException
+	public String displayListWithEdit(@PathVariable("strDate") String strDate, @PathVariable("categoryId") int categoryId, @PathVariable("currencyId") int currencyId, Model model, HttpServletRequest request) throws ParseException
 	{
 		List<Wallet> listWallet = walletDao.findAllByDateCategoryCurrency(DateTools.getDateFromStrDate(strDate), new Category(categoryId), new Currency(currencyId));
 		model.addAttribute("sessionListWallet", listWallet);
+		HttpSession session = request.getSession();
+		session.setAttribute("dataUrl", request.getRequestURI());
 		return "edit";
 	}
 
@@ -232,10 +241,10 @@ public class WalletController
 	 * @return
 	 */
 	@RequestMapping(value = "/list/delete/{id}", method = RequestMethod.GET)
-	public String deleteWallet(@PathVariable("id") int id)
+	public String deleteWallet(@PathVariable("id") int id, HttpSession session)
 	{
 		walletDao.delete(id);
-		return displayListWithEditBySession();
+		return "redirect:/" + FinanzierenTools.getFinanzierenUri((String) session.getAttribute("dataUrl"));
 	}
 
 	/**
@@ -286,10 +295,10 @@ public class WalletController
 	 * @return
 	 */
 	@RequestMapping(value = "/list/edit/{id}", method = RequestMethod.POST)
-	public String editList(@Valid @ModelAttribute("regWalletRecord") Wallet wallet, BindingResult result, Model model)
+	public String editList(@Valid @ModelAttribute("regWalletRecord") Wallet wallet, BindingResult result, Model model, HttpSession session)
 	{
 		walletDao.update(wallet);
-		return displayListWithEditBySession();
+		return "redirect:/" + FinanzierenTools.getFinanzierenUri((String) session.getAttribute("dataUrl"));
 	}
 
 	/**
