@@ -150,8 +150,6 @@ public class WalletController
 	public String displayInfoWithDateCurrency(@ModelAttribute("regWalletRecord") Wallet wallet, Model model)
 	{
 		ListOfDates listOfDates = new ListOfDates();
-		runRefreshBalance(wallet);
-		runRefreshDailyAmount(wallet);
 		List<Balance> listBalance = balanceDao.findByUserid("a34256c6bc043f5e081c39cd58fb03f1");
 		List<Currency> listWlcurrency = currencyDao.findAll();
 		List<DailyAmount> listDailyAmount = dailyAmountDao.findAllByUseidCurrencyDate("a34256c6bc043f5e081c39cd58fb03f1", wallet.getCurrency(), wallet.getDate());

@@ -13,7 +13,7 @@
   <jsp:include page="/WEB-INF/views/menu.jsp" />
   <div id="center">
     <p>
-      <strong>【一覧】...すべてのトランザクションを日付降順で表示します</strong>
+      <strong>【一覧】...年月と通貨を選択して集計した情報を表示します（デフォルト：現在年月と日本円）</strong>
     </p>
     <form:form commandName="regWalletRecord">
       <form:select path="date" onchange="submit();">

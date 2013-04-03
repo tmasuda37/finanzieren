@@ -78,6 +78,7 @@
         </tr>
       </table>
     </form:form>
+    <br />
   </div>
   <div class="#bottom" id="bottom">Copyright (C) Toshifumi Masuda</div>
 </body>

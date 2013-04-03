@@ -34,6 +34,14 @@ public class Category implements Serializable
 		this.id = id;
 	}
 
+	public Category(int id, String category, Kind kind)
+	{
+		super();
+		this.id = id;
+		this.category = category;
+		this.kind = kind;
+	}
+
 	public int getId()
 	{
 		return id;

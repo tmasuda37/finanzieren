@@ -1,6 +1,7 @@
 package info.toshim.finanzieren.repo;
 
 import info.toshim.finanzieren.domain.Category;
+import info.toshim.finanzieren.domain.Kind;
 
 import java.util.List;
 
@@ -38,6 +39,16 @@ public class CategoryDaoImpl implements CategoryDao
 		CriteriaQuery<Category> criteria = cb.createQuery(Category.class);
 		Root<Category> category = criteria.from(Category.class);
 		criteria.select(category);
+		return em.createQuery(criteria).getResultList();
+	}
+
+	public List<Category> findAllKind(Kind kind)
+	{
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Category> criteria = cb.createQuery(Category.class);
+		Root<Category> category = criteria.from(Category.class);
+		criteria.select(category);
+		criteria.where(cb.equal(category.get("kind"), kind));
 		return em.createQuery(criteria).getResultList();
 	}
 
