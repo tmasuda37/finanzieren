@@ -35,6 +35,7 @@
               <a href="<c:url value="/list/${formedDate}/${data3.currency.id}"/>">${data3.sum}</a>
             </display:column>
           </display:table>
+          <a href="<c:url value="/refreshDate"/>">Refresh</a>
         </td>
         <td valign="top">
           <display:table id="data" name="listSummary" class="displaytag2">
@@ -52,7 +53,7 @@
             <display:column title="通貨" property="currency.currency" />
             <display:column title="現在所持金" property="sum" style="text-align: right" />
           </display:table>
-          <a href="<c:url value="/refresh"/>">Refresh</a>
+          <a href="<c:url value="/refreshBalance"/>">Refresh</a>
         </td>
         <td valign="top">
           <display:table id="data" name="listWallet" class="displaytag2">

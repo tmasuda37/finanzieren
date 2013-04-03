@@ -94,8 +94,8 @@ public class WalletController
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/refresh", method = RequestMethod.GET)
-	public String refreshAll()
+	@RequestMapping(value = "/refreshBalance", method = RequestMethod.GET)
+	public String refreshBalance()
 	{
 		Wallet wallet = new Wallet();
 		wallet.setDate(new Date());
@@ -104,6 +104,24 @@ public class WalletController
 		{
 			wallet.setCurrency(listCurrency.get(i));
 			runRefreshBalance(wallet);
+		}
+		return "redirect:/list";
+	}
+
+	/**
+	 * Refreshをクリックした時に実行される
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/refreshDate", method = RequestMethod.GET)
+	public String refreshDate()
+	{
+		Wallet wallet = new Wallet();
+		wallet.setDate(new Date());
+		List<Currency> listCurrency = currencyDao.findAll();
+		for (int i = 0; i < listCurrency.size(); i++)
+		{
+			wallet.setCurrency(listCurrency.get(i));
 			runRefreshDailyAmount(wallet);
 		}
 		return "redirect:/list";
