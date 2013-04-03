@@ -6,6 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="<c:url value="/static/resources/css/style.css"/>" rel="stylesheet" type="text/css">
 <script src="https://use.edgefonts.net/alegreya-sc.js"></script>
+<script src="<c:url value="/static/resources/js/input.js"/>" type="text/javascript"></script>
 </head>
 <body>
   <jsp:include page="/WEB-INF/views/menu.jsp" />
@@ -63,7 +64,8 @@
               備考
               <br>
             </label>
-            <form:textarea path="note" id="note" cols="45" rows="5" />
+            <span id="noteinfo"></span>
+            <form:textarea path="note" id="note" cols="45" rows="5" onkeyup="showLength(this);" />
           </td>
         </tr>
         <tr>
