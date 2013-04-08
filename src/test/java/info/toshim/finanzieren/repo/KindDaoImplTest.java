@@ -39,6 +39,6 @@ public class KindDaoImplTest
 	{
 		Kind actual = kindDao.findById(1);
 		assertThat(actual.getId(), is(1));
-		assertThat(actual.getKind(), is("TEST"));
+		assertThat(actual.getKind(), is("支出"));
 	}
 }
